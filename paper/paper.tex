@@ -34,24 +34,26 @@
 \maketitle
 
 \begin{abstract}
-    Hebbian plasticity is a powerful principle that allows biological brains to
-    learn from their lifetime experience.  By contrast, artificial neural
-    networks trained with backpropagation generally have fixed connection
-    weights that do not change once training is complete.  While recent methods
-    can endow neural networks with long-term memories, Hebbian plasticity is
-    currently not amenable to gradient descent. Here we derive analytical
-    expressions for the
-    gradients for neural networks with Hebbian plastic connections. Using these
-    expressions, we can use backpropagation to train not just the baseline
-    weights of the connections, but also their plasticity. As a result, the
-    networks ``learn how to learn''  in order to solve the problem at hand: the
-    trained networks automatically perform fast learning of unpredictable environmental
-    features during their lifetime, expanding the range of solvable problems. We
-    test the algorithm on simple tasks including pattern completion, one-shot learning, and reversal learning. In each case,
-     the algorithm successfully learns how to learn the relevant
-    associations from short (one-shot) instruction. We conclude
-    that backpropagation of Hebbian plasticity offers a powerful model for
-    lifelong learning.
+
+Hebbian plasticity is a powerful principle that allows biological brains to
+learn from their lifetime experience.  By contrast, artificial neural networks
+trained with backpropagation generally have fixed connection weights that do
+not change once training is complete.  While recent methods can endow neural
+networks with long-term memories, Hebbian plasticity is currently not amenable
+to gradient descent. Here we derive analytical expressions for activity
+gradients in neural networks with Hebbian plastic connections. Using these
+expressions, we can use backpropagation to train not just the baseline weights
+of the connections, but also their plasticity. As a result, the networks
+``learn how to learn''  in order to solve the problem at hand: the trained
+networks automatically perform fast learning of unpredictable environmental
+features during their lifetime, expanding the range of solvable problems. We
+test the algorithm on simple tasks including pattern completion, one-shot
+learning, and reversal learning.  The algorithm successfully learns how to
+learn the relevant associations from one-shot instruction, and fine-tunes the
+temporal dynamics of plasticity to allow for continual learning in response to
+changing environmental parameters. We conclude that backpropagation of Hebbian
+plasticity offers a powerful model for lifelong learning.
+
 \end{abstract}
 
 
@@ -65,10 +67,10 @@ itself a product of evolution, which has fashioned not just the overall
 connectivity of the brain, but also the plasticity of these connections. 
 
 Lifetime learning is beneficial for several reasons. For one thing,
-some environmental features can simply not be predicted at birth and/or change
+many environmental features can simply not be predicted at birth, and/or change
 over time (e.g. the
-position of food sources, the identifying features of other individuals for
-social species, etc.), requiring learning from experience in contact with the
+position of food sources, the identifying features of specific individuals, etc.), 
+requiring learning from experience in contact with the
 environment. Furthermore, even for predictable environmental features, much of
 the information necessary to produce adaptive behavior can be obtained ``for
 free'' by learning from the environment, thus removing a potentially huge chunk
@@ -78,14 +80,15 @@ each single connection genetically specified, allowing a huge number of cells
 to organize into a powerful, reliable information-processing system with
 minimal genetic specification.
 
-Lifetime long-term learning in living brains generally follows the Hebbian principle: a
+Lifetime long-term plasticity in living brains generally follows the Hebbian principle: a
 cell that consistently contributes in making another cell fire will build a
 stronger connection to that cell. Note that this generic principle can be
 implemented in many different ways, including covariance learning, instar and
 outstar rules, BCM learning, etc. (see \cite{Vasilkoski2011-ww} and references therein). 
 
-Backpropagation methods can train neural networks to perform remarkably complex
-tasks. However, they are generally applied to fixed-weights networks. Several
+Backpropagation can train neural networks to perform remarkably complex
+tasks. However, it is generally used to train fixed-weights networks, with no further changes in connectivity after training. 
+Several
 methods have been proposed to make lifelong learning amenable to
 backpropagation, including most recently neural Turing machines
 \cite{Graves2014-ch,Santoro2016-jn} and
@@ -93,13 +96,18 @@ memory networks \cite{Sukhbaatar2015-ly}. However, it would be useful to incorpo
 principle of Hebbian plasticity in backpropagation
 training.
 
-Here we show that neural networks with Hebbian plastic synapses can be optimized by
-gradient descent and backpropagation. To this end, we derive analytic
-expressions for the gradients of neural responses
-over weights and plasticity parameters. Finally, we use these gradients to train neural
-networks for simple tasks, including one-shot and reversal
-learning, showing that the resulting networks
-successfully learn from experience.
+Here we derive analytical expressions for activity gradients in neural networks with
+Hebbian plastic connections. Using these expressions, we can use backpropagation
+to train not just the baseline weights of the connections, but also their
+plasticity. As a result, the networks ``learn how to learn''  in order to solve
+the problem at hand: the trained networks automatically perform fast learning of
+unpredictable environmental features during their lifetime, expanding the range
+of solvable problems. We test the algorithm on simple tasks including pattern
+completion, one-shot learning, and reversal learning.  The algorithm
+successfully learns how to learn the relevant associations from one-shot
+instruction, and fine-tunes the temporal dynamics of plasticity to allow for
+continual learning in response to changing environmental parameters. 
+
 
 All software used for the present paper is available at
 \texttt{http://github.com/thomasmiconi}.
@@ -113,18 +121,10 @@ After training, these parameters are fixed and unchanging over the network's
 lifetime, but govern the way in which
 each connection changes over time, as a result of experience, according to Hebbian plasticity. 
 
-We want to apply backpropagation to optimize these
- networks parameters. Therefore, our goal is to find expressions for the gradient of the response of any
-given cell, over the weights and plasticity parameters of its incoming connections.
-
-Crucially, note that these gradients will take a time-dependent form: when Hebbian
-plasticity is present, the activity of a cell at a given time can influence its
-future responses, even in the absence of recurrent
-connections, due to its Hebbian effect on long-term connection strengths. 
-
 To model Hebbian plasticity, we maintain a time-dependent quantity for each
 connection in the network, which we call the \emph{Hebbian trace} for this
-connection.  In this paper, we use the simplest stable form of Hebbian trace,
+connection.  As noted above, there are many possible expressions for Hebbian
+plasticity \cite{Vasilkoski2011-ww}.  In this paper, we use the simplest stable form of Hebbian trace,
 namely, the running average of the product of pre- and post-synaptic
 activities.  Thus, for a given target cell, the Hebbian trace associated with
 its $k$-th incoming connection is defined as follows:
@@ -155,15 +155,16 @@ b\right\}
 \end{equation}
 
 
-Where $b$ is a bias parameter. 
+where $b$ is a bias parameter. 
 
 
 \section{Gradients}
 
-In order to use backpropagation, we must find the gradient of $y$ over the $w_k$ and
-$\alpha_k$ parameters. As mentioned above, these gradients will necessarily
-involve activities at previous times. Fortunately, these gradients turn out to
-have a simple, recursive form. 
+In order to use backpropagation, we must find the gradient of $y$ over the
+$w_k$ and $\alpha_k$ parameters. Importantly, these gradients will necessarily
+involve activities at previous times, since under plasticity activity at time
+$t$ influences activity at future times $t+n$ due to its effects on Hebbian
+traces. Fortunately, these gradients turn out to have a simple, recursive form. 
 
 Temporarily omitting the $\tanh$ nonlinearity (see below), we get the
 following expressions: 
@@ -230,6 +231,7 @@ according to error backpropagation and gradient descent. The whole process
 iterates for a fixed number of episodes. For the last 500 episodes, training
 stops and networks parameters are frozen.
 
+All source code for these experiments is available at \texttt{http://github.com/thomasmiconi}.
 
 \subsection{Pattern completion}
 
@@ -292,22 +294,17 @@ pattern size: 8 elements). }
 \end{figure}
 
 
-
-
-
-To test the BOHP method, we first apply it to a task for which 
-Hebbian learning is known to be efficient, namely, pattern completion. The
-network is composed of an input and an output layer, each having $N$ neurons.
-In every
-episode, the network is first exposed to a random binary vector of length $N$
-with at least one nonzero element. This binary vector represents tha pterrn to
-be learned.
-Then, at the next timestep, a partial pattern containing only one of the
-non-zero bits of the pattern (all other bits set to 0) is presented. The task of
-the network is to produce the full pattern in the output layer. The error for
-each episode is the
-Manhattan distance between the network's output at the second time step and the
-full pattern (network response during the first step is ignored).
+To test the BOHP method, we first apply it to a task for which Hebbian learning
+is known to be efficient, namely, pattern completion. The network is composed
+of an input and an output layer, each having $N$ neurons.  In every episode,
+the network is first exposed to a random binary vector of length $N$ with at
+least one nonzero element. This binary vector represents the pattern to be
+learned.  Then, at the next timestep, a partial pattern containing only one of
+the non-zero bits of the pattern (all other bits set to 0) is presented. The
+task of the network is to produce the full pattern in the output layer. The
+error for each episode is the Manhattan distance between the network's output
+at the second time step and the full pattern (network response during the first
+step is ignored).
 
 
 The algorithm quickly and reliably learns to solve the task (Figure
@@ -331,7 +328,7 @@ timestep, the input consists of the first pattern, suffixed with label 01;
 and at the second timestep, the input vector is the second pattern, suffixed
 with label 10. These are the only times the labels are presented as inputs: at
 all other times, the input is one of the patterns, suffixed with the neutral
-sufix 00, and the network's output must be the label associated with the current
+suffix 00, and the network's output must be the label associated with the current
 pattern.
 
 \begin{figure}[b]
@@ -416,10 +413,12 @@ pattern size: 8 elements). See text for details.}
 \label{fig:oneshot}
 \end{figure}
 
-The networks have an input layer ($N+2$ nodes), a hidden layer (2 nodes), and an
-output layer (2) nodes. For simplicity, only the first layer of weights
+Patterns are random vectors of $N$ elements, each having
+value 1 or -1, with at least one position differing between the two patterns to
+be learned ($N=8$ for all experiments). The networks have an input layer ($N+2$ nodes), a hidden layer (2 nodes), and an
+output layer (2 nodes). For simplicity, only the first layer of weights
 (input-to-hidden) can have plasticity. The final layer implements softmax
-competition betwen the nodes. Each episode lasts 20 timestep, of which only the first
+competition between the nodes. Each episode lasts 20 timestep, of which only the first
 two contain the expected label for each pattern. We use cross-entropy loss
 between the output values and the expected label at each time step, except for
 the 2-step learning period during which network output is ignored.
@@ -435,8 +434,8 @@ bit. This allows each node to be imprinted to the corresponding pattern. The wei
 produce the adequate label.
 
 Note that some networks displayed a somewhat different pattern where all
-connections between pattern nodes and hidden nodes has negative plasticity
-coefficients. See below
+connections between pattern nodes and hidden nodes have negative plasticity
+coefficients. We discuss this configuration in the next subsection.
 
 \subsection{Reversal learning}
 
@@ -458,17 +457,17 @@ The algorithm also successfully learns to solve this problem (Figure
 \ref{fig:reversal}). The networks are somewhat similar to the ones obtained in
 one-shot
 learning, but with an important difference: connections from pattern input
-to hidden nodes now consistently have \emph{negative} plasticity. While some
+to hidden nodes now consistently have \emph{negative} plasticity coefficients. While some
 networks trained for the one-shot learning task also had this feature,
 all networks trained  for reversal learning consistently show it. This seems to
 be a crucial feature for reversal learning, because clipping plasticity coefficients to positive values
 prevents learning in this task while still allowing successful learning in the
-one-shot task (data not shown). What is the cause of this requirement for
+one-shot task (data not shown). What does reversal learning seem to require
 negative plasticity? 
 
 Negative plasticity implies that hidden layer firing will be anti-correlated to
 the presence of the imprinted stimulus. This in itself is unlikely to have any
-effect, since the effect can be negated by switching signs in the output layer.
+effect, since the effect can be negated by switching signs in the output layer or label node inputs.
 However, negative plasticity also has the important consequence of making the
 Hebbian traces \emph{decrease} over time, rather than increase as they would if
 plasticity coefficient were positive. 
@@ -556,7 +555,7 @@ the pattern nodes to the hidden layer. See text for details.}
 \end{figure}
 
 
-It is well-known thath Hebbian plasticity
+It is well-known that Hebbian plasticity
 creates a positive feedback: correlation between input and output increases the
 connection weight, which in turn increases the correlation in firing, etc. This would
 pose a problem for one-shot reversal learning, because by the time the new patterns are
@@ -565,10 +564,10 @@ timestep.
 However, with negative plasticity coefficients, the opposite is true: the large
 Hebbian trace created on initial imprinting becomes self-decreasing due to a
 \emph{negative} feedback loop. As a result, the Hebbian traces created by the first
-association decrease over time. This has little effect on ongoing outputs, since
+association decrease over time. This has little effect on ongoing responses, since
 the output nonlinearities will magnify even small differences to
 produce the correct responses; for the same reason, one-shot learning (in which
-there is no reversal) is mostly indifferent to the sign of plkasticity coefficients,
+there is no reversal) is mostly indifferent to the sign of plasticity coefficients,
 since the episodes are short enough that the final Hebbian traces will always be
 large enough to support correct choice. However, in the case of reversal
 learning, decreasing Hebbian traces are vital: when the second association is shown,

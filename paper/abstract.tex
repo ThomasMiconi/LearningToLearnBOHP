@@ -20,15 +20,13 @@
 \tikzset{>=latex}
 %\usetikzlibrary{arrows.meta}
 
-\title{Backpropagation of Hebbian plasticity for continual learning}
+\title{\Large Backpropagation of Hebbian plasticity for continual learning}
 
 \author{
     Thomas Miconi\\
     The Neurosciences Institute\\
     La Jolla, CA, USA\\
     \texttt{miconi@nsi.edu}\\
-    All software used for the present article available at
-    \texttt{http://github.com/thomasmiconi}
 }
 
 \begin{document}
@@ -47,7 +45,6 @@ cell that consistently contributes in making another cell fire will build a
 stronger connection to that cell. Note that this generic principle can be
 implemented in many different ways, including covariance learning, instar and
 outstar rules, BCM learning, etc. (see \cite{Vasilkoski2011-ww} and references therein). 
-
 
 Several methods have been proposed to endow artificial neural networks with
 long-term memories amenable to backpropagation training,  including most
@@ -119,7 +116,7 @@ Fortunately, these gradients turn out to
 have a simple, recursive form. 
 
 Omitting the $\tanh$ nonlinearity for clarity, we get the
-following expressions: 
+following expressions (see \texttt{https://github.com/ThomasMiconi/LearningToLearnBOHP/blob/master/paper/paper.pdf} for a full derivation): 
 
 \begin{equation}
 \label{eq:gradw}
@@ -154,8 +151,9 @@ computed. At the end of each episode, the errors and gradients at each timestep
 are used to update network parameters (weights and plasticity coefficients)
 according to error backpropagation and gradient descent. The whole process
 iterates for a fixed number of episodes. For the last 500 episodes, training
-stops and networks parameters are frozen.
+stops and networks parameters are frozen. 
 
+All source code for these experiments is available at \texttt{http://github.com/thomasmiconi}.
 
 \subsection{Pattern Completion}
 
@@ -354,7 +352,7 @@ bit. This allows each node to be imprinted to the corresponding pattern. The wei
 produce the adequate label.
 
 Note that some networks displayed a somewhat different pattern where all
-connections between pattern nodes and hidden nodes has negative plasticity
+connections between pattern nodes and hidden nodes have negative plasticity
 coefficients. We discuss this in the next section.
 
 \subsection{Reversal learning}
