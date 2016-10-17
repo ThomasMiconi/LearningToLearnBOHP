@@ -1,0 +1,651 @@
+\documentclass{article}
+\usepackage{tikz}    
+\usepackage[final,nonatbib]{nips_2016}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsmath}       
+\usepackage{caption}       
+\usepackage{subcaption}       
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+\usepackage[backend=bibtex]{biblatex}
+\bibliography{smallbiblio}
+%\usetikzlibrary{arrows}
+\tikzset{>=latex}
+%\usetikzlibrary{arrows.meta}
+
+\title{Learning to learn with backpropagation of Hebbian plasticity}
+
+\author{
+    Thomas Miconi\\
+    The Neurosciences Institute\\
+    La Jolla, CA, USA\\
+    \texttt{miconi@nsi.edu}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    Hebbian plasticity is a powerful principle that allows biological brains to
+    learn from their lifetime experience.  By contrast, artificial neural
+    networks trained with backpropagation generally have fixed connection
+    weights that do not change once training is complete.  While recent methods
+    can endow neural networks with long-term memories, Hebbian plasticity is
+    currently not amenable to gradient descent. Here we derive analytical
+    expressions for the
+    gradients for neural networks with Hebbian plastic connections. Using these
+    expressions, we can use backpropagation to train not just the baseline
+    weights of the connections, but also their plasticity. As a result, the
+    networks "learn how to learn"  in order to solve the problem at hand: the
+    trained networks automatically perform fast learning of unpredictable environmental
+    features during their lifetime, expanding the range of solvable problems. We
+    test the algorithm on simple tasks including pattern completion, one-shot learning, and reversal learning. In each case,
+     the algorithm successfully learns how to learn the relevant
+    associations from short (one-shot) instruction. We conclude
+    that backpropagation of Hebbian plasticity offers a powerful model for
+    lifelong learning.
+\end{abstract}
+
+
+\section{Introduction}
+
+Living organisms endowed with neural systems exhibit remarkably complex behaviors.
+While much of this complexity results from evolutionary learning over millions
+of years, it also results from the ability of neural systems to learn from
+experience during their lifetime. Indeed, this ability for lifelong learning is
+itself a product of evolution, which has fashioned not just the overall
+connectivity of the brain, but also the plasticity of these connections. 
+
+Lifetime learning is beneficial for several reasons. For one thing,
+some environmental features can simply not be predicted at birth and/or change
+over time (e.g. the
+position of food sources, the identifying features of other individuals for
+social species, etc.), requiring learning from experience in contact with the
+environment. Furthermore, even for predictable environmental features, much of
+the information necessary to produce adaptive behavior can be obtained ``for
+free'' by learning from the environment, thus removing a potentially huge chunk
+of the search space that evolution must explore. For example, the connectivity
+of primary visual cortex is fashioned by Hebbian plasticity rather than having
+each single connection genetically specified, allowing a huge number of cells
+to organize into a powerful, reliable information-processing system with
+minimal genetic specification.
+
+Lifetime long-term learning in living brains generally follows the Hebbian principle: a
+cell that consistently contributes in making another cell fire will build a
+stronger connection to that cell. Note that this generic principle can be
+implemented in many different ways, including covariance learning, instar and
+outstar rules, BCM learning, etc. (see \cite{Vasilkoski2011-ww} and references therein). 
+
+Backpropagation methods can train neural networks to perform remarkably complex
+tasks. However, they are generally applied to fixed-weights networks. Several
+methods have been proposed to make lifelong learning amenable to
+backpropagation, including most recently neural Turing machines
+\cite{Graves2014-ch,Santoro2016-jn} and
+memory networks \cite{Sukhbaatar2015-ly}. However, it would be useful to incorporate the powerful, well-studied
+principle of Hebbian plasticity in backpropagation
+training.
+
+Here we show that neural networks with Hebbian plastic synapses can be optimized by
+gradient descent and backpropagation. To this end, we derive analytic
+expressions for the gradients of neural responses
+over weights and plasticity parameters. Finally, we use these gradients to train neural
+networks for simple tasks, including one-shot and reversal
+learning, showing that the resulting networks
+successfully learn from experience.
+
+All software used for the present paper is available at
+\texttt{http://github.com/thomasmiconi}.
+
+\section{Networks with Hebbian synapses}
+
+We consider networks where the strength of each connection can vary according to
+Hebbian plasticity over the course of the network's lifetime. We will arrange things so that each network is fully specified
+by fixed parameters which determine both the baseline weight \emph{and} the degree of plasticity of each connection.
+After training, these parameters are fixed and unchanging over the network's
+lifetime, but govern the way in which
+each connection changes over time, as a result of experience, according to Hebbian plasticity. 
+
+We want to apply backpropagation to optimize these
+ networks parameters. Therefore, our goal is to find expressions for the gradient of the response of any
+given cell, over the weights and plasticity parameters of its incoming connections.
+
+Crucially, note that these gradients will take a time-dependent form: when Hebbian
+plasticity is present, the activity of a cell at a given time can influence its
+future responses, even in the absence of recurrent
+connections, due to its Hebbian effect on long-term connection strengths. 
+
+To model Hebbian plasticity, we maintain a time-dependent quantity for each
+connection in the network, which we call the \emph{Hebbian trace} for this
+connection.  In this paper, we use the simplest stable form of Hebbian trace,
+namely, the running average of the product of pre- and post-synaptic
+activities.  Thus, for a given target cell, the Hebbian trace associated with
+its $k$-th incoming connection is defined as follows:
+
+\begin{equation}
+\label{eq:hebb}
+Hebb_k(t) = (1-\gamma) * Hebb_k(t-1) + \gamma * x_k(t) * y(t)
+\end{equation}
+
+where $y(t)$ is the activity of the post-synaptic cell, $x_k(t)$ is the activity
+of the pre-synaptic cell, and $\gamma$ is a time constant. While other
+expressions of Hebbian plasticity are possible, this simple form turns out to be
+adequate for our present purposes and simplifies the mathematics.
+
+The Hebbian trace is maintained automatically, independently of network
+parameters, for each connection. Given this Hebbian trace, the
+actual strength of the connection at time $t$ is determined by two fixed parameters: a fixed
+weight $w_k$, which determines the ``baseline'', unchanging component of the
+connection; and a \emph{plasticity parameter} $\alpha_k$, which specifies how
+much the Hebbian trace influences the actual connection. More formally, the
+response $y$ of a given cell can be written as a function of its inputs as
+follows:
+
+\begin{equation}
+\label{eq:y}
+y(t) = \tanh\left\{\sum_{k \in inputs}[w_k x_k(t) + \alpha_k Hebb_k(t) x_k(t)] +
+b\right\}
+\end{equation}
+
+
+Where $b$ is a bias parameter. 
+
+
+\section{Gradients}
+
+In order to use backpropagation, we must find the gradient of $y$ over the $w_k$ and
+$\alpha_k$ parameters. As mentioned above, these gradients will necessarily
+involve activities at previous times. Fortunately, these gradients turn out to
+have a simple, recursive form. 
+
+Temporarily omitting the $\tanh$ nonlinearity (see below), we get the
+following expressions: 
+
+\begin{equation}
+\label{eq:gradw}
+\frac{\partial y(t_z)}{\partial w_k} = x_k(t_z) + \sum_{l \in inputs}[\alpha_l
+x_l(t_z) \sum_{t_u<t_z}(1-\gamma) \gamma^{t_z-t_u} x_l(t_u) \frac{\partial
+y(t_u)}{\partial w_k}]
+\end{equation}
+
+\begin{equation}
+\label{eq:gradalpha}
+\frac{\partial y(t_z)}{\partial \alpha_k} = x_k(t_z) Hebb_k(t_z) + \sum_{l \in inputs}
+[\alpha_l x_l(t_z) \sum_{t_u<t_z}(1-\gamma) \gamma^{t_z-t_u} x_l(t_u) \frac{\partial
+y(t_u)}{\partial \alpha_k}]
+\end{equation}
+
+(See Appendix for a full derivation.)
+
+These equations express the gradient of $y(t_z)$ as a function of the gradients
+of $y(t_z<t_u)$, that is, recursively.
+
+In each of these equations, the summand over previous times $t_u<t_z$ is
+essentially the partial derivative of the Hebbian traces at time $t_{z}$
+with respect to either $w_k$ (Eq. \ref{eq:gradw}) or $\alpha_k$ (Eq.
+\ref{eq:gradalpha}). Since the Hebbian trace is the exponential average of
+previous products of $x$ and $y$, these partial derivatives turn out to be
+sums of the previous gradients of $y$ over the corresponding parameter,
+multiplied by the concomitant activity of the input cell $x_k$ (the $\gamma$ terms
+account for the exponential decay of the running average). Thus, the gradient at
+time $t_z$ is a function of (the weighted sum of) the gradients at times
+$t_u<t_z$.
+
+Note that the sum is over the Hebbian traces of \emph{all} inputs to $y$, not just the
+one associated with connection $k$ for which we are computing the gradient. This is because the values of $w_k$ and
+$\alpha_k$, by affecting $y$, also influence the Hebbian traces of all other
+connections to $y$ - which will in turn further affect $y$ at later times. This effect must be accounted for in the above gradients.
+
+The above expression omits the $\tanh$ nonlinearity: it really provides the
+gradient of the expression within the curly braces in Eq. \ref{eq:y}, that is,
+the ``raw'' output (call it $y_{raw}$) provided by incoming excitation and biases. To obtain
+the full gradient $\frac{\partial y(t_z)}{\partial w_k}$, we simply rewrite $y$ as $y =
+\tanh(y_{raw})$ and apply the chain rule: $\frac{\partial y}{\partial w_k} =
+\frac{\partial \tanh(y_{raw})}{\partial y_{raw}} \frac{\partial y_{raw}}{\partial
+w_k} = (1 - y^2)\frac{\partial y_{raw}}{\partial w_k}$, where $\frac{\partial
+y_{raw}}{\partial w_k}$ is provided by Eq. \ref{eq:gradw} above (and similarly
+for $\frac{\partial
+y_{raw})}{\partial \alpha_k}$ 
+
+\section{Experiments}
+
+\subsection{Applying BOHP}
+
+In all tasks described below, lifetime experience is divided into
+\emph{episodes}, each of which lasts for a certain number of timesteps. At the
+beginning of each episode, all Hebbian traces are initialized (set to 0). Then,
+at each timestep, the network processes an input pattern and produces an output
+according to its current parameters, and the Hebbian traces are updated
+according to Equation \ref{eq:hebb}. Furthermore, errors and gradients are also
+computed. At the end of each episode, the errors and gradients at each timestep
+are used to update network parameters (weights and plasticity coefficients)
+according to error backpropagation and gradient descent. The whole process
+iterates until training completes.
+
+
+\subsection{Pattern completion}
+
+To test the BOHP method, we first apply it to a task for which 
+Hebbian learning is known to be efficient, namely, pattern completion. The
+network is composed of an input and an output layer, each having $N$ neurons.
+In every
+episode, the network is first exposed to a random binary vector of length $N$
+with at least one nonzero element. This binary vector represents tha pterrn to
+be learned.
+Then, at the next timestep, a partial pattern containing only one of the
+non-zero bits of the pattern (all other bits set to 0) is presented. The task of
+the network is to produce the full pattern in the output layer. The error for
+each episode is the
+Manhattan distance between the network's output at the second time step and the
+full pattern (network response during the first step is ignored).
+
+The algorithm quickly and reliably learns to solve the task. The final networks
+after training exhibit the expected pattern: each input node sends one strong,
+fixed connection to the corresponding output node, as well as one plastic
+connection to every output node. As a result, during pattern presentation, each
+non-zero input develops a strong connection to every non-zero output due to
+Hebbian learning, ensuring successful pattern completion on the second step when
+one of the nonzero inputs is stimulated. 
+
+\subsection{One-shot learning of arbitrary patterns}
+
+In this task, at each episode, the network must learn to associate each of two
+random binary vectors with its label. The labels are simply two-element vectors
+set to 01 for one of the
+vectors, and 10 for the other. Importantly, learning is one-shot: at the first
+timestep, the input consists of the first pattern, suffixed with label 01;
+and at the second timestep, the input vector is the second pattern, suffixed
+with label 10. These are the only times the labels are presented as inputs: at
+all other times, the input is one of the patterns, suffixed with the neutral
+sufix 00, and the network's output must be the label associated with the current
+pattern.
+
+The networks have an input layer ($N+2$ nodes), a hidden layer (2 nodes), and an
+output layer (2) nodes. For simplicity, only the first layer of weights
+(input-to-hidden) can have plasticity. The final layer implements softmax
+competition betwen the nodes. Each episode lasts 20 timestep, of which only the first
+two contain the expected label for each pattern. We use cross-entropy loss
+between the output values and the expected label at each time step, except for
+the 2-step learning period during which network output is ignored.
+
+Again, the algorithm reliably learns to solve the task. The trained networks are
+organized in such a way that one hidden node learns the pattern with label 01,
+and the other learns the pattern associated with label 10: they receive strong,
+fixed (positive and negative) connections from the label bits, but receive only
+strong plastic connections (with zero fixed-weight connections) from the pattern
+bit. The weights between hidden and top layer ensures that the top two nodes
+produce the adequate label.
+
+\subsection{Reversal learning}
+
+Previous experiments show that the algorithm can train networks to learn fast
+associations of environmental inputs. But can it also teach networks to adapt to
+a changing environment - that is, to perform continual learning over their
+lifetime? 
+
+To test this, we adapt the previous one-shot learning task into a
+continual learning task: halfway through each episode, we invert the two
+patterns, so that the pattern previously associated with label 01 is now
+associated with label 10, and vice-versa. We show each of the pattern with its
+updated label once. Then we resume showing input patterns with neutral, 00
+suffixes, and expect the network's output to be the adequate new label for
+each input pattern.
+
+The trained networks show some similarity to the ones obtained in one-shot
+learning, but with an important difference: the connections from pattern input
+to hidden nodes now consistently have \emph{negative} plasticity.  This seems to
+be a crucial feature, as clipping plasticity coefficients to positive values
+prevents learning in this task while still allowing successful learning in the
+one-shot task (data not shown). Negative plasticity implies that, when the node
+is first activated to a positive output (by the fixed connections from the label
+input nodes), it will build \emph{negative} Hebbian connections from the
+currently shown pattern, and thus in the future will fire negatively when this
+pattern is presented. On the second pattern presentation, when the other label
+is active and makes the node fire negatively, the node will then build
+\emph{positive} Hebbian for the second pattern. Thus the network learns to fire
+negatively to the first pattern, and positively to the second. We propose the
+following interpretation: this behavior is required because it makes the Hebbian
+trace self-decreasing, rather than self reinforcing (as direct Hebbian learning
+usually is), because the plasticity increment will be of opposite sign to the
+current Hebbian trace. As a result, the Hebbian traces will decrease over time
+(rather than increase due to self-reinforcement, as happens in the one-shot
+learning task), and thus at reversal time, they are small enough that they can
+be efficiently overwritten in one step. Using positive plasticity coefficient
+with reversed output weights would have similar effects in the first half ot the
+task (as it does in one-shot learning), but would make the Hebbian trace
+self-reinforcing, and thus at reversal time Hebbian traces would be too large to
+be overwritten in one step.  Notice that this suggests precise fine-tuning of
+temporal learning dynamics by the algorithm.
+
+\subsection{Classical conditioning}
+\subsection{Task}
+
+To test the BOHP method, we train networks to perform a simple task inspired by
+classical conditioning \cite{Fanselow2016-gz}. In this task, at every time step, the network can encounter two kinds of
+stimulus, one of which has a certain probability of being associated with a
+``pain'' signal. Which stimulus predicts the potential presence of pain 
+changes unpredictably from one episode to the next, but remains stable during each
+episode.  For each episode, the network's task is to quickly learn which of
+the two stimuli is
+potentially pain-causing, and produce high response (``fear'') whenever
+this stimulus is present, even in the absence of pain. 
+
+The networks have access to three sensors, one for each stimulus (S1 and S2),
+and one for the pain signal (P). At any time step within the episode, one or
+both stimuli may be present, setting the associated stimulus sensor to 1; also,
+a pain signal may be delivered, setting the P sensor to 1. The P sensor is
+activated with probability .3 when the pain-associated stimulus is present, and
+never activated otherwise (P sensor activation is independent of the presence or
+absence of the other, non-associated stimulus). We expect the network to
+produce output 1 when the pain-associated stimulus is present (even if no pain
+is currently delivered), and 0 otherwise.
+
+The error for each timestep is simply the squared difference between expected
+and actual output. Each episode lasts 100 timesteps. Note that we do not take
+into account error during the first 20 timesteps (the ``learning period'' for
+each episode). While not strictly necessary, we found that allowing for a
+``free'' exploratory learning period improved learning. Note that
+backpropagation will not seek to reduce error during the learning period, but
+will still take into account network activity during the learning period to
+reduce the error after the learning period, as expressed by the recursive
+gradients in Eqs. \ref{eq:gradw} and \ref{eq:gradalpha}.
+
+\subsection{Results}
+
+\begin{figure}
+\centering
+\begin{subfigure}[t]{0.4\textwidth}
+\centering
+\includegraphics[scale=0.5]{figexcl.png}
+\subcaption{Mutually exclusive stimuli}
+\end{subfigure}
+\begin{subfigure}[t]{0.4\textwidth}
+\centering
+\includegraphics[scale=0.5]{figuncorr.png}
+\subcaption{Uncorrelated stimuli}
+\end{subfigure}
+\caption{Mean absolute error per timestep over each episode, for mutually
+exclusive stimuli (a) and uncorrelated stimuli (b). Dark lines indicate median
+over 20 runs, while shaded areas indicate interquartile range.}
+\label{fig:error}
+\end{figure}
+
+
+We first use a version of the task in which the two stimuli are mutually
+exclusive: only one of S1 or S2 can be active at any given time step. In this
+setting, the ``fearful'' stimulus (the one that the network should learn to
+detect and respond to) is the only one that can be active when the
+pain sensor is also active, which should facilitate learning. 
+For this simple version of the task, we use very simple networks consisting of one layer of weights, with a single
+output cell directly connected to each sensor. 
+
+We find that BOHP easily solves this task, designing networks that learn to
+associate incoming stimuli with the presence or absence of the pain signal (see
+Figure \ref{fig:error}a). The
+resulting networks consistently follow the same pattern (Figure
+\ref{fig:networks}a). The P sensor sends a
+very strong, fixed-weight connection to the output cell. As a result, the output
+cell $y$ is activated whenever the pain signal is present, as expected. By contrast, the
+connections from the two stimulus
+sensors have nearly zero fixed weight $w$, but very high plasticity $\alpha$. As
+a result, S1 and S2 initially provide zero excitation to the  output cell $y$;
+however, as soon as one of S1 or S2 is activated at the same time as P, it will
+immediately produce a large Hebbian trace for its connection to $y$ (since $y$
+will be activated by the P sensor, and Hebbian traces accumulate the product of
+input and output for each connection). Because of the high $\alpha$, this high
+Hebbian trace will immediately create a strong overall connection from the
+active stimulus sensor to $y$. As a result, this sensor can now activate $y$ on
+its own, even in the absence of pain, exhibiting successful conditioning.
+
+We then slightly modify the task by making the two stimuli uncorrelated: the
+presence or absence of one stimulus is independent of the other (but only one of
+these is potentially associated with pain). As a result, the non-predictive
+stimulus can now be active at the same time as the P sensor, making the previous
+strategy ineffective since it would result in having non-zero response to the
+non-predictive stimulus. 
+
+We find that BOHP cannot solve this problem with simple one-layer networks over
+a wide range of parameters. We therefore expand the networks in the most minimal
+way possible, by adding a hidden layer with two hidden neurons H1 and H2. Only the connections between input and
+hidden neurons can be plastic; the hidden-to-output connections can only have
+fixed weights.
+
+With such two-layer networks, BOHP again easily solves the task (Figure
+\ref{fig:error}b), with a somewhat different solution (Figure
+\ref{fig:networks}b). Each of the two hidden neuron still receives a strong
+fixed connection from the $P$ sensor, making both of them active whenever P is.
+However, they now receive opposite-sign plastic connections with from the
+stimulus sensors: one of the hidden units has high positive $\alpha$ from S1
+and high \emph{negative} $\alpha$ from S2, and vice-versa for the other hidden
+unit.  Furthermore, both hidden units have large negative biases, making them
+inactive unless they receive high excitation.  We propose the following
+interpretation. Notice that the Hebbian trace for the predictive stimulus will
+be much larger than for the non-predictive stimulus.  Suppose that S1 is the
+associated stimulus. As a result, one hidden unit (label it H1) will have
+strong positive connection from S1 (due to the high Hebbian trace between S1
+and hidden neurons), but also a weak inhibitory connection from S2 (due to the
+weak Hebbian trace between S2 and hidden neurons), making it active whenever S1
+is present (even if S2 is present) and inactive otherwise. By contrast, the
+other unit (H2) will have a strong inhibitory connection from S1, and weak
+excitatory connection from S2, making it inactive at any time. If S2 is the
+predictive stimuli, then the roles are reversed: H1 is never active, and H2 is
+only active when S2 is present. Thus, H1 and H2 jointly detect the predictive
+stimulus (whichever it is) and remain quiescent otherwise (``quiescent'' here
+means negative output, which is compensated by a positive bias on the single
+neuron of the output layer).
+
+% An additional factor is that the negative alpha will reduce the magnitude of
+% the Hebbian trace, since it will create a negative correlation between the
+% input and output! This is an extension of the general idea that Hebbian
+% plasticity is fundamentally self-reinforcing...
+
+
+
+
+\begin{figure}
+\centering
+%\includegraphics[scale=0.25]{figgraphs.png}
+% Actual code for the graphs (be sure to uncomment \usepackage{tikz} in the header).  
+\begin{subfigure}[t]{0.2\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{scope}[every node/.style={circle,thick,draw}]
+\node (y) at (1,2) {y};
+\node (P) at (0,0) {P};
+\node (S1) at (1,0) {S1};
+\node (S2) at (2,0) {S2};
+\end{scope}
+%\begin{scope}[>={Stealth[black]},
+\begin{scope}[
+        every node/.style={fill=white,circle},
+    every edge/.style={draw=black,very thick}]
+
+    \path [->] (P) edge   [bend left=10](y);
+    \path [dashed][->] (P) edge   [bend right=10](y);
+
+    %\path [->] (S2) edge  [bend left=10](y);
+    \path [dashed][->] (S2) edge  (y);
+
+    %\path [->] (S1) edge [bend left=10] (y); 
+    \path [dashed][->] (S1) edge  (y); 
+
+\end{scope}
+\end{tikzpicture}
+\subcaption{Solution for mutually exclusive stimuli}
+\end{subfigure}
+\qquad
+\begin{subfigure}[t]{0.35\textwidth}
+\centering
+\begin{tikzpicture}
+\centering
+\begin{scope}[every node/.style={circle,thick,draw}]
+\node (y) at (1.5,3) {y};
+\node (H1) at (.75,1.5) {H1};
+\node (H2) at (2.25,1.5) {H2};
+\node (P) at (0,0) {P};
+\node (S1) at (1.5,0) {S1};
+\node (S2) at (3,0) {S2};
+%\node (D) at (2.5,1) {D};
+%\node (E) at (2.5,-3) {E};
+%\node (F) at (5,3) {F} ;
+\end{scope}
+\begin{scope}[%>={Stealth},
+        every node/.style={fill=white,circle},
+    every edge/.style={draw=black,very thick}]
+    
+    \path [->] (P) edge   [bend left=10](H1);
+    \path [->] (P) edge   [bend left=10](H2);
+
+    %\path [->] (S2) edge  [bend left=10](y);
+    \path [dashed][->] (S1) edge  (H1);
+    \path [dashed][->] (S1) edge [red] (H2);
+
+    %\path [->] (S1) edge [bend left=10] (y); 
+    \path [dashed][->] (S2) edge [red,bend right=10](H1); 
+    \path [dashed][->] (S2) edge  [bend right=10](H2); 
+
+    \path [->] (H1) edge   [bend left=10](y);
+    \path [->] (H2) edge   [bend right=10](y);
+
+
+    %\path [->] (E) edge node {$8$} (F); 
+    %\path [->] (B) edge[bend right=60] node {$1$} (E); 
+\end{scope}
+\end{tikzpicture}
+\subcaption{Solution for uncorrelated stimuli}
+\end{subfigure}
+%\qquad
+%\begin{subfigure}[t]{0.3\textwidth}
+%\parbox[t]{4cm}{
+%\parbox[t][][t]{0.9\textwidth}{
+\begin{minipage}[b]{0.35\textwidth}
+\centering
+\begin{itemize}
+\item[]\tikz{\path[very thick,->,draw=black] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Excitatory fixed-weight connection
+\item[]\tikz{\path[very thick,->,draw=red] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Inhibitory fixed-weight connection
+\item[]\tikz{\path[very thick,->,dashed,draw=black] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Excitatory plastic connection
+\item[]\tikz{\path[very thick,->,dashed,draw=red] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Inhibitory plastic connection
+\end{itemize}
+\end{minipage}
+%%\end{subfigure}
+%%%% Look at 'example of perrin jablonski diagram' for how to make a legend with itemize...
+
+\caption{Schematic networks found by BOHP to solve the conditioning problem with
+mutually exclusive stimuli (a) or uncorrelated stimuli (b).}
+\label{fig:networks}
+\end{figure}
+
+
+\section{Conclusions and future work}
+
+
+In this paper we have introduced a method for designing networks endowed with
+Hebbian plasticity through gradient descent and backpropagation. To this end, we
+derived gradients of neural activities over input weights and plasticity
+parameters. The method successfully solved a simple conditioning task, learning
+to detect and respond to a conditioned stimulus.
+
+Here we only use a very simple form of Hebbian plasticity, namely, the
+running average of the product between pre- and post-synaptic activities.
+However, there are other possible formulations of Hebbian plasticity, such as
+covariance learning (mean-centering pre- and post-synaptic responses), instar
+and outstar rules, or BCM learning. These can be implemented in BOHP by updating
+the gradient equations appropriately, which might expand the capacities of BOHP. However, as shown above, the simple
+Hebbian plasticity used here can already produce fast, reliable lifetime
+learning.
+
+In addition, while we used very simple networks with only one plastic layer, the gradients
+derived here can potentially be applied to more complex networks, including large
+multi-layer networks and recurrent networks. 
+We are currently exploring the application of BOHP to larger networks for more complex tasks.
+
+In conclusion, we suggest that backpropagation of Hebbian plasticity is an
+efficient 
+way to endow neural networks with lifelong learning abilities, while still being
+amenable to gradient descent. 
+
+\section*{Appendix}
+
+Here we provide a more complete derivation of the gradients of output cell
+response $y$ at a given timestep $t_z$ with regard to the $\alpha$ coefficient
+of an incoming connection $k$ (where input activity of the pre-synaptic neuron
+at this connection is denoted by $x_k$). 
+
+First we simply write out the
+full expression for $y$, from Equation \ref{eq:y} (again, note that we omit
+the $\tanh$ nonlinearity):
+
+\[
+\frac{\partial y(t_z)}{\partial \alpha_k} = \frac{\partial }{\partial \alpha_k}[ \sum_{l \in inputs}w_l x_l(t_z) + \sum_{l \in inputs}\alpha_l Hebb_l(t_z) x_l(t_z) ] 
+\]
+
+The first summand on the right-hand side denotes the inputs to $y$ from incoming connections through the fixed weights; since this term does not depend on $\alpha$ in any way, we can remove it from the gradient computation.
+
+The second summand denotes inputs through plastic connections. The cases for
+$l=k$ and $l\neq k$ must be handled differently, since we are differentiating
+with regard to $\alpha_k$:
+
+\begin{align}
+\frac{\partial y(t_z)}{\partial \alpha_k} &= \frac{\partial }{\partial \alpha_k}[
+\sum_{l \neq k }\alpha_l Hebb_l(t_z) x_l(t_z) + \alpha_k Hebb_k(t_z) x_k(t_z)]\\
+&= \sum_{l \neq k }[\frac{\partial }{\partial \alpha_k} (\alpha_l x_l(t_z) Hebb_l(t_z))] + \frac{\partial }{\partial \alpha_k}[\alpha_k Hebb_k(t_z) x_k(t_z)]
+\end{align}
+
+With regard to $\alpha_k$, the derivative in the first right-hand-side term has the
+form $d(Const*f(\alpha_k))/d\alpha_k$, since only the $Hebb_l(t_z)$ depends on $\alpha_k$
+(indirectly through $y$). By contrast, the second right-hand-side term has the
+form $d(Const*\alpha_k*f(\alpha_k))/d\alpha_k$, so we must develop it using the identity
+$(xf(x))'=xf'(x)+f(x)$. Therefore:
+
+\[
+\frac{\partial y(t_z)}{\partial \alpha_k} = \sum_{l \neq k }[\alpha_l
+x_l(t_z)\frac{\partial }{\partial \alpha_k}Hebb_l(t_z)] +
+x_k(t_z)(\alpha_k\frac{\partial }{\partial \alpha_k}Hebb_k(t_z) + Hebb_k(t_z))
+\]
+
+Replacing the $Hebb(t)$ terms by their full expression as the accumulated product of $x$ and
+$y$ (Eq. \ref{eq:hebb}), we get:
+
+\begin{align}
+\frac{\partial y(t_z)}{\partial \alpha_k} &= \sum_{l \neq k }[\alpha_l x_l(t_z) \frac{\partial }{\partial
+\alpha_k}\sum_{t_u < t_z}(1-\gamma)\gamma^{tz-tu}x_l(t_u)y(t_u))] \nonumber \\ 
+& \qquad {} + x_k(t_z)[\alpha_k\frac{\partial}{\partial \alpha_k}\sum_{t_u <
+t_z}(1-\gamma)\gamma^{tz-tu}x_k(t_u)y(t_u) + Hebb_k(tz)]\\
+&= \sum_{l \neq k }[\alpha_l x_l(t_z) \sum_{t_u < t_z}(1-\gamma)\gamma^{tz-tu}x_l(t_u)\frac{\partial }{\partial
+\alpha_k}y(t_u)] \nonumber \\
+& \qquad {} + x_k(t_z)[\alpha_k\sum_{t_u <
+t_z}x_k(t_u)(1-\gamma)\gamma^{tz-tu}\frac{\partial}{\partial \alpha_k}y(t_u) + Hebb_k(tz)]\\
+&= \sum_{l \in inputs}[\alpha_l x_l(t_z)\sum_{t_u <
+t_z}(1-\gamma)\gamma^{t_z-t_u}x_l(t_u)\frac{\partial
+}{\partial
+\alpha_k}y(t_u)] +
+x_k(t_z)Hebb_k(tz)
+\end{align}
+
+
+where in the last equation above, $l$ runs over all incoming connections to $y$,
+including $k$. This recursive gradient equation is identical to Eq.
+\ref{eq:gradalpha}.
+
+Eq. \ref{eq:gradw} is derived much in the same manner (though slightly simpler
+since we do not need to use the $(xf(x))'=xf'(x)+f(x)$ identity). For future applications to
+many-layers networks, equations for the gradient
+$\frac{\partial y(t_z)}{\partial x_k}$ are easily obtained with a similar
+derivation.
+
+\small
+\printbibliography
+
+\end{document}
+
