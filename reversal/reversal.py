@@ -5,30 +5,38 @@ from scipy.special import expit as logist
 import sys
 import cPickle as pickle
 
-# %run oneshot.py LEARNPERIOD 2 NBITER 20 YSIZE 2 ALPHATRACE .98
+# This is the code for the reversal learning task.
+# The reversal learning task is essentially equivalent to the one-shot learning
+# task, except that halfway through the episode, we revert the labels of the
+# two patterns, show each pattern with updated label once, and go on.
 
-np.set_printoptions(suppress=True, precision=8)  
+
+# Note that we include code for gradient checking (try %run oneshot.py GRADIENTCHECKING 1)
 
 
-xsize=10  # 8 pattern bits + 2 instructional
-zsize=2
-# ysize is defined in g, and thus changeable from command line. 
+np.set_printoptions(suppress=True, precision=8)  # Because engineering notation gets old fast
 
+
+xsize=10    # Input layer: 8 pattern bits + 2 label bits.
+zsize=2     # Output layer
+# ysize (the size of the hidden layer) is defined in g, and thus changeable from command line. 
+
+
+# All the following options are modifiable from the command line
 g = {
 'GRADIENTCHECKING': 0,
-'LINEARY': 0,
-'NBITER': 20,      # 20 for gradient checking, with LEARNPERIOD 10
-'YSIZE': 2,         # Number of neurons in the y layer (note: if 1, this is essentially equivalent to a single-layer network since the last layer is a single one-to-one connection)
+'NBITER': 20,       # Number of timestesp per episode      
+'YSIZE': 2,         # Number of neurons in the hidden (y) layer 
 'LEARNPERIOD': 2,   # Learning period during which the desired response is shown at the same time as the patterns. Set to 2 for one-shot learning.
 'POSWEIGHTS': 0,    # If you want to enforce all weights to be positive (don't!)
 'UPDATETYPE': 'RMSPROP',
 'ALPHATRACE' : .98, # The Gamma parameter in the paper (time constant for the exponential decay of the running average of input-output products fot the Hebbian traces)
-'NBSESSIONS': 10000,  # Total number of episodes. For gradient checking, always 3. 
-'RNGSEED' : 0,      # Random seed!
+'NBEPISODES': 10000,  # Total number of episodes. For gradient checking, always 3 (see below). 
+'RNGSEED' : 0,      # Random seed for reproducibility
 'ETA' : .01,       # Learning rate
 'MAXDW' : .01,      # Maximum absolute value of parameter modification after every episode (see below)
-#'STIMCORR': 'UNCORRELATED', # Whether the two stimuli are 'EXCLUSIVE' or 'UNCORRELATED'. The former is much easier.
 'WPEN' : 1e-4,      # Coefficient of the L1 penalty on weights for regularization.
+'LINEARY': 0,       # If you want linear rather than tanh output on the hidden layer, for debugging or gradient-checking
 'TEST': 0           # If you want to run using weights from a saved file (see below)
 }
 
@@ -59,7 +67,7 @@ mwxy, mwyz, malpha , mbz, mby = np.zeros_like(wxy), np.zeros_like(wyz), np.zeros
 if g['GRADIENTCHECKING']:
     g['NBITER'] = 20
     g['LEARNPERIOD'] = 10
-    g['NBSESSIONS'] = 3
+    g['NBEPISODES'] = 3
     FROZENINPUTSIZE = 500; frozeninputs = .2 * np.random.randn(xsize, FROZENINPUTSIZE)  # For debugging / gradient checking
     WINC = 0.003 *  np.random.randn(ysize, xsize)
     ALPHAINC = 0.003 * np.random.randn(ysize, xsize)
@@ -71,42 +79,38 @@ if g['GRADIENTCHECKING']:
 # DEBUGGING !
 #alpha.fill(0)
 
-#ZESAME = 1234; ZEDIFF = 4321
 archy = []
 archz = []
 errs=[]
 archerrs = []
 
 if g['TEST']:
-    testdir='session-corr-withz-ETA-0.01-MAXDW-0.03-WPEN-3e-4-UPDATETYPE-RMSPROP-POSWEIGHTS-0-STIMCORR-UNCORRELATED-YSIZE-2-LEARNPERIOD-0-ALPHATRACE-.95/v8/'
+    testdir='./'
     with open(testdir+'data.pkl', 'r') as handle:
               (wxy, wyz, alpha, by, bz, hebb, errs, g) = pickle.load(handle)
     g['TEST'] = 1  # because the data file will obliterate g
 
 
 
-for session in range(g['NBSESSIONS']):
+for episode in range(g['NBEPISODES']):
  
-    # -1/1 patterns work with one-shot learning!
+    # The system does work with 0/1 patterns, but less well / need a somewhat longer learning period.
+    # -1/1 patterns:
     pattern1 = 2 * (np.random.rand(xsize-2, 1) > .5).astype(int) -1
-    # Patterns of 0s and 1s also work, if you're careful, e.g. make sure that both patterns will have at least one 1 and one 0
-    # Also may require longer learning period
     # A pattern of 0s and 1s with at least two 1s:
     #while True:
     #    pattern1 = (np.random.rand(xsize-2, 1) > .5).astype(int)
     #    if np.sum(pattern1) > 1:
     #        break
-    
-    pattern2 = pattern1.copy()
-    flipbit = np.random.randint(pattern2.size)
-    #pattern2[flipbit] =  1 - pattern2[flipbit]      # For 0/1
-    pattern2[flipbit] =   - pattern2[flipbit]      # For -1/1
-    
+    #pattern2 = pattern1.copy()
+    #flipbit = np.random.randint(pattern2.size)
+    ##pattern2[flipbit] =  1 - pattern2[flipbit]   # For 0/1
+    #pattern2[flipbit] =   - pattern2[flipbit]   # for -1/1
+
     # A random pattern that differs from pattern 1 in at least one place
     pattern2 = 2 * (np.random.rand(xsize-2, 1) > .5).astype(int) -1
     while not np.any(pattern1 != pattern2):
         pattern2 = 2 * (np.random.rand(xsize-2, 1) > .5).astype(int) -1
-
     
     if g['GRADIENTCHECKING']:
         wxy += WINC
@@ -114,8 +118,7 @@ for session in range(g['NBSESSIONS']):
         pattern1.fill(1)
         pattern2.fill(1)
         pattern2[1] =-1 
-        np.random.seed(int(g['RNGSEED']))    # We need to use the same random seed for all 3 sessions!
-        #RESPCUE = ZESAME
+        np.random.seed(int(g['RNGSEED']))    # We need to use the same random seed for all 3 episodes!
     
     dydas=[]
     dydws=[]
@@ -124,43 +127,16 @@ for session in range(g['NBSESSIONS']):
 
     # Run the episode!
     for n in range(int(g['NBITER'])):
-        #x = .25 * np.random.randn(xsize, 1)
-        #x.fill(.25)
-        
 
         # DEBUGGING
         #alpha.fill(0)
-        #alpha[:, :2] = 0
-        # For one-shot learning, positive alpha are fine... but for reversal, it really doesn't like it!
-        #alpha[alpha<0] = 0
-
-        alpha =  np.array([[ 14.8910107 ,  17.92990281,  -1.969501  ,  -1.8744967 ,
-                     -1.90463554,  -1.99194621,  -1.84390621,  -2.03172483,
-                              -1.91654628,  -1.95070122],
-                                     [ 15.15995626,  18.17716986,  -1.86856225,  -1.96703071,
-                                                  -1.9279633 ,  -1.91994799,  -1.98424457,  -1.98673231,
-                                                           -1.98478139,  -1.8355365 ]])
-        wxy = np.array([[ 17.08313572, -21.14534463,  -0.00223763,  -0.00491233,
-                     -0.00488199,  -0.00052909,   0.01294025,  -0.00961874,
-                               0.00028166,  -0.00302073],
-                                      [ 17.07142989, -21.27376158,  -0.00179821,  -0.00529862,
-                                                   -0.00465859,  -0.00078432,   0.0125907 ,  -0.00968891,
-                                                             0.00000043,  -0.00290426]])
-        wyz = np.array([[-19.10713321, -19.39618628],
-                   [ 19.43008975,  19.53875368]])
         
-        #alpha[1,:] = alpha[0,:]
-        #wxy[1,:] = wxy[0,:]
-        #
-        #alpha.fill(2)
-        #wxy[:,:2] = 100* np.sign(wxy[:,:2])
-        #wyz *= -1
-
-
+        # Reversal !
         if n == g['NBITER'] / 2:
             pattern3 = pattern2.copy()
             pattern2 = pattern1.copy()
             pattern1 = pattern3.copy()
+
 
         x = np.zeros((xsize, 1)).astype(int)
         if n%2 == 0:     
@@ -170,9 +146,11 @@ for session in range(g['NBSESSIONS']):
 
         x[2:] = pattern[:]
         
+        # The target output is the label for this pattern - 01 or 10
         tgt = np.zeros((2, 1))
         tgt[n % 2] = 1
 
+        # We only show the labels during the learning periods, both at the start and after reversal
         if n < g['LEARNPERIOD'] or (n >= g['NBITER'] / 2 and n < g['NBITER'] / 2 + g['LEARNPERIOD']):
             x[:2] = tgt[:]
 
@@ -209,7 +187,7 @@ for session in range(g['NBSESSIONS']):
         summand=0
         for k in range(xsize):
             summand += alpha[None, :, k].T * x[k] * sum([prevx[k] * prevdy *gm for prevx, prevdy, gm in zip(xs, dydas, gammas)]) # Gradients of the Hebbian traces wrt the alphas
-        dyda = summand + x.T * hebb   # Note that dyda is a matrix, of the same shape as wxy (there is one gradient per alph, and one alpha per connection)
+        dyda = summand + x.T * hebb   # Note that dyda is a matrix, of the same shape as wxy (there is one gradient per alpha, and one alpha per connection)
         if not g['LINEARY']:
             dyda = (1 - np.tanh(y) * np.tanh(y)) * dyda  
             #dyda = (1 - logist(y)) * logist(y) * dyda  
@@ -253,15 +231,9 @@ for session in range(g['NBSESSIONS']):
     
     # Now that the episode is completed, we can run some backpropagation. 
 
-    # First, let us compute the error at each timestep in the topmost layer (z)
-    #zsflat = np.array(zs).flatten()   # Flattens the z's of this episode into a single vector - NOTE: assumes zsize=1
-    #archz.append(zsflat)
-
-
-
     # Loss: -log(p(correct)), where p(x) is the proba computed for option x by the softmax (i.e. the z)
     errors = -np.log(np.choose(np.argmax(tgts, axis=0), zs))
-    errors[:g['LEARNPERIOD']].fill(0)       # We don't care about early session, exploratory "learning" period.....  Not strictly needed, but makes things a bit better.
+    errors[:g['LEARNPERIOD']].fill(0)       # We don't care about early episode, exploratory "learning" period.....  Not strictly needed, but makes things a bit better.
     errors[g['NBITER']/2:g['NBITER']/2+g['LEARNPERIOD']].fill(0)
     archerrs.append(errors)
     
@@ -278,11 +250,11 @@ for session in range(g['NBSESSIONS']):
     # We backpropagate this through the yz weights to get the gradient of the error wrt the y's at each timestep:
     dedys =  np.dot(wyz.T, dedzsraw)    # Should have dimensions ysize, nbtimesteps
 
-    dedysrawthroughtanh = dedys * (1 -  ys * ys)   # Gradient through tanh nonlinearity
-    dedysraw = dedys.copy()             # If the gradient dyda/dydw already includes the tanh nonlinearity, we don't need it here (?...)
+    dedysrawthroughtanh = dedys * (1 -  ys * ys)    # Gradient through tanh nonlinearity. This is needed for the biases.
+    dedysraw = dedys.copy()                         # Since the gradients dyda and dydw already includes the tanh nonlinearity, we don't need it here.
 
     if g['GRADIENTCHECKING']:
-        if session == 1:   
+        if episode == 1:   
             rdydas = dydas.copy()
             rdydws = dydws.copy()
             rdedys = dedysraw.copy()
@@ -290,7 +262,7 @@ for session in range(g['NBSESSIONS']):
             rdedws = dedysraw[:, None, :] * rdydws
     
     # Now we use the computed gradients for actual weight modification, using the quantities computed at each timestep during the episode!
-    if (not g['TEST']) and (not g['GRADIENTCHECKING']) and session < g['NBSESSIONS']-500:
+    if (not g['TEST']) and (not g['GRADIENTCHECKING']) and episode < g['NBEPISODES']-500:
         # First, the biases by and bz:
         dbz = np.sum(dedzsraw, axis=1)    
         dby = np.sum(dedysrawthroughtanh, axis=1)
@@ -306,7 +278,7 @@ for session in range(g['NBSESSIONS']):
                                     [dwxy, dwyz, dalpha, dby, dbz],
                                     [mwxy, mwyz, malpha, mby, mbz] ):
             #mem = .99 * mem + .01 * dparam * dparam   # Does NOT update the m-variables - head.desk()
-            if session == 0:
+            if episode == 0:
                 mem +=  dparam * dparam 
             else:
                 mem +=  .01 * (dparam * dparam - mem)    # Does update the m-variables
@@ -339,9 +311,9 @@ for session in range(g['NBSESSIONS']):
     # Log the total error for this episode
     meanerror = np.mean(np.abs(errors[g['LEARNPERIOD']:]))
 
-    # Every 10th session, display a message and update the output file
-    if session % 10 == 0:
-        print "Session #", session, " - mean abs. error per timestep (excluding learning period): ", meanerror
+    # Every 10th episode, display a message and update the output file
+    if episode % 10 == 0:
+        print "Session #", episode, " - mean abs. error per timestep (excluding learning period): ", meanerror
         print "Errors at each timestep (should be 0.0 for early learning period):"
         print errors
         np.savetxt("errs.txt", np.array(errs))
@@ -352,7 +324,7 @@ for session in range(g['NBSESSIONS']):
         #      (wxy, wyz, alpha, by, bz, hebb, errs, g) = pickle.load(handle)
     errs.append(meanerror)
 
-    # End loop over sessions
+    # End loop over episodes
 
 
 # This checks the gradient on ys 
