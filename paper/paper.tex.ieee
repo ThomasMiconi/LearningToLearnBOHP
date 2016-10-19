@@ -1,6 +1,7 @@
-\documentclass{article}
+%\documentclass{article}
+\documentclass[journal]{IEEEtran}
 \usepackage{tikz}    
-\usepackage[final,nonatbib]{nips_2016}
+%\usepackage[final,nonatbib]{nips_2016}
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -47,7 +48,7 @@ of the connections, but also their plasticity. As a result, the networks
 ``learn how to learn''  in order to solve the problem at hand: the trained
 networks automatically perform fast learning of unpredictable environmental
 features during their lifetime, expanding the range of solvable problems. We
-test the algorithm on various on-line learning tasks, including pattern completion, one-shot
+test the algorithm on simple tasks including pattern completion, one-shot
 learning, and reversal learning.  The algorithm successfully learns how to
 learn the relevant associations from one-shot instruction, and fine-tunes the
 temporal dynamics of plasticity to allow for continual learning in response to
@@ -75,7 +76,7 @@ environment. Furthermore, even for predictable environmental features, much of
 the information necessary to produce adaptive behavior can be obtained ``for
 free'' by learning from the environment, thus removing a potentially huge chunk
 of the search space that evolution must explore. For example, the connectivity
-of primary visual cortex is fashioned by Hebbian plasticity rather than having
+of primary visual cortex is partly fashioned by Hebbian plasticity rather than having
 each single connection genetically specified \cite{espinosa2012development}, allowing a huge number of cells
 to organize into a powerful, reliable information-processing system with
 minimal genetic specification.
@@ -96,12 +97,18 @@ memory networks \cite{Sukhbaatar2015-ly}. However, it would be useful to incorpo
 principle of Hebbian plasticity in backpropagation
 training.
 
-Here we derive analytical expressions for activity gradients in neural networks
-with Hebbian plastic connections. Using these expressions, we can use
-backpropagation to train not just the baseline weights of the connections, but
-also their plasticity. This allows backpropagation to ``learn how to learn'',
-in order to solve general types of problems with unpredictable features, rather
-than specific instances.
+Here we derive analytical expressions for activity gradients in neural networks with
+Hebbian plastic connections. Using these expressions, we can use backpropagation
+to train not just the baseline weights of the connections, but also their
+plasticity. As a result, the networks ``learn how to learn''  in order to solve
+the problem at hand: the trained networks automatically perform fast learning of
+unpredictable environmental features during their lifetime, expanding the range
+of solvable problems. We test the algorithm on simple tasks including pattern
+completion, one-shot learning, and reversal learning.  The algorithm
+successfully learns how to learn the relevant associations from one-shot
+instruction, and fine-tunes the temporal dynamics of plasticity to allow for
+continual learning in response to changing environmental parameters. 
+
 
 All software used for the present paper is available at
 \texttt{http://github.com/thomasmiconi}.
@@ -125,7 +132,10 @@ its $k$-th incoming connection is defined as follows:
 
 \begin{equation}
 \label{eq:hebb}
-Hebb_k(t) = (1-\gamma) * Hebb_k(t-1) + \gamma * x_k(t) * y(t)
+\begin{aligned}
+    Hebb_k(t) = & (1-\gamma) * Hebb_k(t-1) \\
+& + \gamma * x_k(t) * y(t)
+\end{aligned}
 \end{equation}
 
 where $y(t)$ is the activity of the post-synaptic cell, $x_k(t)$ is the activity
@@ -165,22 +175,28 @@ following expressions:
 
 \begin{equation}
 \label{eq:gradw}
-\frac{\partial y(t_z)}{\partial w_k} = x_k(t_z) + \sum_{l \in inputs}[\alpha_l
+\begin{aligned}
+    \frac{\partial y(t_z)}{\partial w_k} = & x_k(t_z) + \\
+                                           & \sum_{l \in inputs}[\alpha_l
 x_l(t_z) \sum_{t_u<t_z}(1-\gamma) \gamma^{t_z-t_u} x_l(t_u) \frac{\partial
 y(t_u)}{\partial w_k}]
+\end{aligned}
 \end{equation}
 
 \begin{equation}
 \label{eq:gradalpha}
-\frac{\partial y(t_z)}{\partial \alpha_k} = x_k(t_z) Hebb_k(t_z) + \sum_{l \in inputs}
+\begin{aligned}
+    \frac{\partial y(t_z)}{\partial \alpha_k} = &x_k(t_z) Hebb_k(t_z) + \\ 
+                                                &\sum_{l \in inputs}
 [\alpha_l x_l(t_z) \sum_{t_u<t_z}(1-\gamma) \gamma^{t_z-t_u} x_l(t_u) \frac{\partial
 y(t_u)}{\partial \alpha_k}]
+\end{aligned}
 \end{equation}
 
 (See Appendix for a full derivation.)
 
 These equations express the gradient of $y(t_z)$ as a function of the gradients
-of $y(t_z<t_u)$, that is, recursively.
+of $y(t_u<t_z)$, that is, recursively.
 
 In each of these equations, the summand over previous times $t_u<t_z$ is
 essentially the partial derivative of the Hebbian traces at time $t_{z}$
@@ -229,7 +245,7 @@ All source code for these experiments is available at \texttt{http://github.com/
 
 \subsection{Pattern completion}
 
-\begin{figure}
+\begin{figure*}
 \centering
 \begin{subfigure}[t]{0.35\textwidth}
 \centering
@@ -285,7 +301,7 @@ episodes, training is halted and parameters are frozen. (b) Schema of a
 typical network after training. Only 3 elements shown for clarity (actual
 pattern size: 8 elements). }
 \label{fig:completion}
-\end{figure}
+\end{figure*}
 
 
 To test the BOHP method, we first apply it to a task for which Hebbian learning
@@ -312,20 +328,7 @@ one of the nonzero inputs is stimulated.
 
 \subsection{One-shot learning of arbitrary patterns}
 
-
-
-In this task, at each episode, the network must learn to associate each of two
-random binary vectors with its label. The labels are simply two-element vectors
-set to 01 for one of the
-vectors, and 10 for the other. Importantly, learning is one-shot: at the first
-timestep, the input consists of the first pattern, suffixed with label 01;
-and at the second timestep, the input vector is the second pattern, suffixed
-with label 10. These are the only times the labels are presented as inputs: at
-all other times, the input is one of the patterns, suffixed with the neutral
-suffix 00, and the network's output must be the label associated with the current
-pattern.
-
-\begin{figure}[b]
+\begin{figure*}
 \noindent
 \begin{subfigure}[t]{0.35\textwidth}
 %\centering
@@ -354,10 +357,10 @@ pattern.
     
     %\path [->] (P) edge   [bend left=10](H1);
     
-    \path [->] (L1) edge [blue,opacity=0.33,bend left=10]  (Y1);
+    \path [->] (L1) edge [blue,bend left=10]  (Y1);
     \path [->] (L1) edge  [bend left=10] (Y2);
 
-    \path [->] (L2) edge [blue,opacity=0.33,bend left=10]  (Y2);
+    \path [->] (L2) edge [blue,bend left=10]  (Y2);
     \path [->] (L2) edge [bend left=10]  (Y1);
 
 
@@ -370,9 +373,9 @@ pattern.
     \path [dashed,thin][->] (X3) edge   (Y2);
 
     \path [->] (Y1) edge  (Z2);
-    \path [->] (Y1) edge [blue,opacity=0.33] (Z1);
+    \path [->] (Y1) edge [blue] (Z1);
     \path [->] (Y2) edge  (Z1);
-    \path [->] (Y2) edge [blue,opacity=0.33] (Z2);
+    \path [->] (Y2) edge [blue] (Z2);
 
 
     %\path [->] (E) edge node {$8$} (F); 
@@ -387,11 +390,11 @@ pattern.
 \begin{itemize}[leftmargin=*] % This is from enumitem package
 \item[]\tikz{\path[very thick,->,draw=black] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Excitatory fixed-weight connection
-\item[]\tikz{\path[very thick,->,draw=blue,opacity=0.33] %,>={Stealth}] 
+\item[]\tikz{\path[very thick,->,draw=blue] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Inhibitory fixed-weight connection
 \item[]\tikz{\path[very thick,->,dashed,draw=black] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Excitatory plastic connection
-\item[]\tikz{\path[very thick,->,dashed,draw=blue,opacity=0.33] %,>={Stealth}] 
+\item[]\tikz{\path[very thick,->,dashed,draw=blue] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Inhibitory plastic connection
 \end{itemize}
 \end{minipage}
@@ -405,7 +408,19 @@ pattern.
 typical network after training. In addition to the label nodes L1 and L2, only 3 pattern elements shown for clarity (actual
 pattern size: 8 elements). See text for details.}
 \label{fig:oneshot}
-\end{figure}
+\end{figure*}
+
+
+In this task, at each episode, the network must learn to associate each of two
+random binary vectors with its label. The labels are simply two-element vectors
+set to 01 for one of the
+vectors, and 10 for the other. Importantly, learning is one-shot: at the first
+timestep, the input consists of the first pattern, suffixed with label 01;
+and at the second timestep, the input vector is the second pattern, suffixed
+with label 10. These are the only times the labels are presented as inputs: at
+all other times, the input is one of the patterns, suffixed with the neutral
+suffix 00, and the network's output must be the label associated with the current
+pattern.
 
 Patterns are random vectors of $N$ elements, each having
 value 1 or -1, with at least one position differing between the two patterns to
@@ -432,6 +447,89 @@ connections between pattern nodes and hidden nodes have negative plasticity
 coefficients. We discuss this configuration in the next subsection.
 
 \subsection{Reversal learning}
+
+\begin{figure*}
+\noindent
+\begin{subfigure}[t]{0.35\textwidth}
+%\centering
+\noindent
+\includegraphics[scale=0.5]{figResultsReversal.png}
+\subcaption{Training error}
+\end{subfigure}
+\begin{subfigure}[t]{0.4\textwidth}
+\centering
+\begin{tikzpicture}[scale=.9]
+\centering
+\begin{scope}[every node/.style={circle,thick,draw}]
+\node (Z1) at (1,3) {\tiny Z1};
+\node (Z2) at (3,3) {\tiny Z2};
+\node (Y1) at (1,1.5) {\tiny Y1};
+\node (Y2) at (3,1.5) {\tiny Y2};
+\node (L1) at (0,0) {\tiny L1};
+\node (L2) at (1,0) {\tiny L2};
+\node (X1) at (2.5,0) {\tiny X1};
+\node (X2) at (3.5,0) {\tiny X2};
+\node (X3) at (4.5,0) {\tiny X3};
+\end{scope}
+\begin{scope}[%>={Stealth},
+        every node/.style={fill=white,circle},
+    every edge/.style={draw=black,very thick}]
+    
+    %\path [->] (P) edge   [bend left=10](H1);
+    
+    \path [->] (L1) edge [blue,bend left=10]  (Y2);
+    \path [->] (L1) edge  [bend left=10] (Y1);
+
+    \path [->] (L2) edge [blue,bend left=10]  (Y1);
+    \path [->] (L2) edge [bend left=10]  (Y2);
+
+
+    \path [dashed,thin][->] (X1) edge  [blue] (Y1);
+    \path [dashed,thin][->] (X2) edge  [blue] (Y1);
+    \path [dashed,thin][->] (X3) edge  [blue] (Y1);
+
+    \path [dashed,thin][->] (X1) edge   [blue](Y2);
+    \path [dashed,thin][->] (X2) edge   [blue](Y2);
+    \path [dashed,thin][->] (X3) edge   [blue](Y2);
+
+    \path [->] (Y1) edge  (Z2);
+    \path [->] (Y1) edge [blue] (Z1);
+    \path [->] (Y2) edge  (Z1);
+    \path [->] (Y2) edge [blue] (Z2);
+
+
+    %\path [->] (E) edge node {$8$} (F); 
+    %\path [->] (B) edge[bend right=60] node {$1$} (E); 
+\end{scope}
+\end{tikzpicture}
+\subcaption{Typical trained network}
+\end{subfigure}
+\begin{minipage}[b]{0.2\textwidth}
+\noindent
+\small
+\begin{itemize}[leftmargin=*] % This is from enumitem package
+\item[]\tikz{\path[very thick,->,draw=black] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Excitatory fixed-weight connection
+\item[]\tikz{\path[very thick,->,draw=blue] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Inhibitory fixed-weight connection
+\item[]\tikz{\path[very thick,->,dashed,draw=black] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Excitatory plastic connection
+\item[]\tikz{\path[very thick,->,dashed,draw=blue] %,>={Stealth}] 
+        (0,0) -- (1,0) ;}Inhibitory plastic connection
+\end{itemize}
+\end{minipage}
+%%\end{subfigure}
+%%%% Look at 'example of perrin jablonski diagram' for how to make a legend with itemize...
+
+\caption{Results for the reversal learning experiment. Conventions are as in Figure
+    \ref{fig:completion}.
+(a) Mean absolute error
+    per timestep over each episode. (b) Schema of a
+typical network after training. Notice the negative plasticity connections from
+the pattern nodes to the hidden layer. See text for details.}
+\label{fig:reversal}
+\end{figure*}
+
 
 Previous experiments show that the algorithm can train networks to learn fast
 associations of environmental inputs. But can it also teach networks to adapt to
@@ -465,88 +563,6 @@ effect, since the effect can be negated by switching signs in the output layer o
 However, negative plasticity also has the important consequence of making the
 Hebbian traces \emph{decrease} over time, rather than increase as they would if
 plasticity coefficient were positive. 
-
-\begin{figure}
-\noindent
-\begin{subfigure}[t]{0.35\textwidth}
-%\centering
-\noindent
-\includegraphics[scale=0.5]{figResultsReversal.png}
-\subcaption{Training error}
-\end{subfigure}
-\begin{subfigure}[t]{0.4\textwidth}
-\centering
-\begin{tikzpicture}[scale=.9]
-\centering
-\begin{scope}[every node/.style={circle,thick,draw}]
-\node (Z1) at (1,3) {\tiny Z1};
-\node (Z2) at (3,3) {\tiny Z2};
-\node (Y1) at (1,1.5) {\tiny Y1};
-\node (Y2) at (3,1.5) {\tiny Y2};
-\node (L1) at (0,0) {\tiny L1};
-\node (L2) at (1,0) {\tiny L2};
-\node (X1) at (2.5,0) {\tiny X1};
-\node (X2) at (3.5,0) {\tiny X2};
-\node (X3) at (4.5,0) {\tiny X3};
-\end{scope}
-\begin{scope}[%>={Stealth},
-        every node/.style={fill=white,circle},
-    every edge/.style={draw=black,very thick}]
-    
-    %\path [->] (P) edge   [bend left=10](H1);
-    
-    \path [->] (L1) edge [blue,opacity=0.33,bend left=10]  (Y2);
-    \path [->] (L1) edge  [bend left=10] (Y1);
-
-    \path [->] (L2) edge [blue,opacity=0.33,bend left=10]  (Y1);
-    \path [->] (L2) edge [bend left=10]  (Y2);
-
-
-    \path [dashed,thin][->] (X1) edge  [blue,opacity=0.33] (Y1);
-    \path [dashed,thin][->] (X2) edge  [blue,opacity=0.33] (Y1);
-    \path [dashed,thin][->] (X3) edge  [blue,opacity=0.33] (Y1);
-
-    \path [dashed,thin][->] (X1) edge   [blue,opacity=0.33](Y2);
-    \path [dashed,thin][->] (X2) edge   [blue,opacity=0.33](Y2);
-    \path [dashed,thin][->] (X3) edge   [blue,opacity=0.33](Y2);
-
-    \path [->] (Y1) edge  (Z2);
-    \path [->] (Y1) edge [blue,opacity=0.33] (Z1);
-    \path [->] (Y2) edge  (Z1);
-    \path [->] (Y2) edge [blue,opacity=0.33] (Z2);
-
-
-    %\path [->] (E) edge node {$8$} (F); 
-    %\path [->] (B) edge[bend right=60] node {$1$} (E); 
-\end{scope}
-\end{tikzpicture}
-\subcaption{Typical trained network}
-\end{subfigure}
-\begin{minipage}[b]{0.2\textwidth}
-\noindent
-\small
-\begin{itemize}[leftmargin=*] % This is from enumitem package
-\item[]\tikz{\path[very thick,->,draw=black] %,>={Stealth}] 
-        (0,0) -- (1,0) ;}Excitatory fixed-weight connection
-\item[]\tikz{\path[very thick,->,draw=blue,opacity=0.33] %,>={Stealth}] 
-        (0,0) -- (1,0) ;}Inhibitory fixed-weight connection
-\item[]\tikz{\path[very thick,->,dashed,draw=black] %,>={Stealth}] 
-        (0,0) -- (1,0) ;}Excitatory plastic connection
-\item[]\tikz{\path[very thick,->,dashed,draw=blue,opacity=0.33] %,>={Stealth}] 
-        (0,0) -- (1,0) ;}Inhibitory plastic connection
-\end{itemize}
-\end{minipage}
-%%\end{subfigure}
-%%%% Look at 'example of perrin jablonski diagram' for how to make a legend with itemize...
-
-\caption{Results for the reversal learning experiment. Conventions are as in Figure
-    \ref{fig:completion}.
-(a) Mean absolute error
-    per timestep over each episode. (b) Schema of a
-typical network after training. Notice the negative plasticity connections from
-the pattern nodes to the hidden layer. See text for details.}
-\label{fig:reversal}
-\end{figure}
 
 
 It is well-known that Hebbian plasticity
@@ -605,10 +621,10 @@ neuromodulation has been used in neural networks built by evolutionary methods
 \cite{Soltoggio2013-rg}, the methods described in this paper could be extended to allow
 backpropagation to design modulable-plasticity networks.
 
-%In addition, while we used very simple networks with only one plastic layer, the gradients
-%derived here can potentially be applied to more complex networks, including large
-%multi-layer networks and recurrent networks. 
-%We are currently exploring the application of BOHP to larger networks for more complex tasks.
+In addition, while we used very simple networks with only one plastic layer, the gradients
+derived here can potentially be applied to more complex networks, including large
+multi-layer networks and recurrent networks. 
+We are currently exploring the application of BOHP to larger networks for more complex tasks.
 
 In conclusion, we suggest that backpropagation of Hebbian plasticity is an
 efficient way to endow neural networks with long-term memories and lifelong
@@ -622,7 +638,7 @@ of an incoming connection $k$ (where input activity of the pre-synaptic neuron
 at this connection is denoted by $x_k$). 
 
 First we simply write out the
-full expression for $y$, from Equation \ref{eq:y} (again, we initially omit
+full expression for $y$, from Equation \ref{eq:y} (again, we omit
 the $\tanh$ nonlinearity):
 
 \[
@@ -635,11 +651,12 @@ The second summand denotes inputs through plastic connections. The cases for
 $l=k$ and $l\neq k$ must be handled differently, since we are differentiating
 with regard to $\alpha_k$:
 
-\begin{align}
+\begin{align*}
 \frac{\partial y(t_z)}{\partial \alpha_k} &= \frac{\partial }{\partial \alpha_k}[
 \sum_{l \neq k }\alpha_l Hebb_l(t_z) x_l(t_z) + \alpha_k Hebb_k(t_z) x_k(t_z)]\\
-&= \sum_{l \neq k }[\frac{\partial }{\partial \alpha_k} (\alpha_l x_l(t_z) Hebb_l(t_z))] + \frac{\partial }{\partial \alpha_k}[\alpha_k Hebb_k(t_z) x_k(t_z)]
-\end{align}
+&= \sum_{l \neq k }[\frac{\partial }{\partial \alpha_k} (\alpha_l x_l(t_z) Hebb_l(t_z))] \\
+& \quad {} + \frac{\partial }{\partial \alpha_k}[\alpha_k Hebb_k(t_z) x_k(t_z)]
+\end{align*}
 
 With regard to $\alpha_k$, the derivative in the first right-hand-side term has the
 form $d(Const*f(\alpha_k))/d\alpha_k$, since only the $Hebb_l(t_z)$ depends on $\alpha_k$
@@ -647,30 +664,35 @@ form $d(Const*f(\alpha_k))/d\alpha_k$, since only the $Hebb_l(t_z)$ depends on $
 form $d(Const*\alpha_k*f(\alpha_k))/d\alpha_k$, so we must develop it using the identity
 $(xf(x))'=xf'(x)+f(x)$. Therefore:
 
-\[
-\frac{\partial y(t_z)}{\partial \alpha_k} = \sum_{l \neq k }[\alpha_l
-x_l(t_z)\frac{\partial }{\partial \alpha_k}Hebb_l(t_z)] +
-x_k(t_z)(\alpha_k\frac{\partial }{\partial \alpha_k}Hebb_k(t_z) + Hebb_k(t_z))
-\]
+%\[
+    \begin{align*}
+        \frac{\partial y(t_z)}{\partial \alpha_k} = &\sum_{l \neq k }[\alpha_l
+    x_l(t_z)\frac{\partial }{\partial \alpha_k}Hebb_l(t_z)] \\
+    &+ x_k(t_z)(\alpha_k\frac{\partial }{\partial \alpha_k}Hebb_k(t_z) + Hebb_k(t_z))
+\end{align*}
+%\]
 
 Replacing the $Hebb(t)$ terms by their full expression as the accumulated product of $x$ and
 $y$ (Eq. \ref{eq:hebb}), we get:
 
-\begin{align}
+\begin{align*}
 \frac{\partial y(t_z)}{\partial \alpha_k} &= \sum_{l \neq k }[\alpha_l x_l(t_z) \frac{\partial }{\partial
 \alpha_k}\sum_{t_u < t_z}(1-\gamma)\gamma^{tz-tu}x_l(t_u)y(t_u))] \nonumber \\ 
 & \qquad {} + x_k(t_z)[\alpha_k\frac{\partial}{\partial \alpha_k}\sum_{t_u <
-t_z}(1-\gamma)\gamma^{tz-tu}x_k(t_u)y(t_u) + Hebb_k(tz)]\\
+t_z}(1-\gamma)\gamma^{tz-tu}x_k(t_u)y(t_u) \\
+& \qquad {} + Hebb_k(tz)]\\
 &= \sum_{l \neq k }[\alpha_l x_l(t_z) \sum_{t_u < t_z}(1-\gamma)\gamma^{tz-tu}x_l(t_u)\frac{\partial }{\partial
 \alpha_k}y(t_u)] \nonumber \\
 & \qquad {} + x_k(t_z)[\alpha_k\sum_{t_u <
-t_z}x_k(t_u)(1-\gamma)\gamma^{tz-tu}\frac{\partial}{\partial \alpha_k}y(t_u) + Hebb_k(tz)]\\
+t_z}x_k(t_u)(1-\gamma)\gamma^{tz-tu}\frac{\partial}{\partial \alpha_k}y(t_u) \\
+& \qquad {} + Hebb_k(tz)]\\
 &= \sum_{l \in inputs}[\alpha_l x_l(t_z)\sum_{t_u <
 t_z}(1-\gamma)\gamma^{t_z-t_u}x_l(t_u)\frac{\partial
 }{\partial
-\alpha_k}y(t_u)] +
+\alpha_k}y(t_u)] \\
+& \qquad{} +
 x_k(t_z)Hebb_k(tz)
-\end{align}
+\end{align*}
 
 
 where in the last equation above, $l$ runs over all incoming connections to $y$,

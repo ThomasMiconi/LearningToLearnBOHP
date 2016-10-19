@@ -47,7 +47,7 @@ of the connections, but also their plasticity. As a result, the networks
 ``learn how to learn''  in order to solve the problem at hand: the trained
 networks automatically perform fast learning of unpredictable environmental
 features during their lifetime, expanding the range of solvable problems. We
-test the algorithm on various on-line learning tasks, including pattern completion, one-shot
+test the algorithm on simple tasks including pattern completion, one-shot
 learning, and reversal learning.  The algorithm successfully learns how to
 learn the relevant associations from one-shot instruction, and fine-tunes the
 temporal dynamics of plasticity to allow for continual learning in response to
@@ -76,7 +76,7 @@ the information necessary to produce adaptive behavior can be obtained ``for
 free'' by learning from the environment, thus removing a potentially huge chunk
 of the search space that evolution must explore. For example, the connectivity
 of primary visual cortex is fashioned by Hebbian plasticity rather than having
-each single connection genetically specified \cite{espinosa2012development}, allowing a huge number of cells
+each single connection genetically specified, allowing a huge number of cells
 to organize into a powerful, reliable information-processing system with
 minimal genetic specification.
 
@@ -96,12 +96,18 @@ memory networks \cite{Sukhbaatar2015-ly}. However, it would be useful to incorpo
 principle of Hebbian plasticity in backpropagation
 training.
 
-Here we derive analytical expressions for activity gradients in neural networks
-with Hebbian plastic connections. Using these expressions, we can use
-backpropagation to train not just the baseline weights of the connections, but
-also their plasticity. This allows backpropagation to ``learn how to learn'',
-in order to solve general types of problems with unpredictable features, rather
-than specific instances.
+Here we derive analytical expressions for activity gradients in neural networks with
+Hebbian plastic connections. Using these expressions, we can use backpropagation
+to train not just the baseline weights of the connections, but also their
+plasticity. As a result, the networks ``learn how to learn''  in order to solve
+the problem at hand: the trained networks automatically perform fast learning of
+unpredictable environmental features during their lifetime, expanding the range
+of solvable problems. We test the algorithm on simple tasks including pattern
+completion, one-shot learning, and reversal learning.  The algorithm
+successfully learns how to learn the relevant associations from one-shot
+instruction, and fine-tunes the temporal dynamics of plasticity to allow for
+continual learning in response to changing environmental parameters. 
+
 
 All software used for the present paper is available at
 \texttt{http://github.com/thomasmiconi}.
@@ -215,7 +221,7 @@ y_{raw})}{\partial \alpha_k}$
 
 In all tasks described below, lifetime experience is divided into
 \emph{episodes}, each of which lasts for a certain number of timesteps. At the
-beginning of each episode, all Hebbian traces are initialized to 0. Then,
+beginning of each episode, all Hebbian traces are initialized (set to 0). Then,
 at each timestep, the network processes an input pattern and produces an output
 according to its current parameters, and the Hebbian traces are updated
 according to Equation \ref{eq:hebb}. Furthermore, errors and gradients are also
@@ -354,10 +360,10 @@ pattern.
     
     %\path [->] (P) edge   [bend left=10](H1);
     
-    \path [->] (L1) edge [blue,opacity=0.33,bend left=10]  (Y1);
+    \path [->] (L1) edge [blue,bend left=10]  (Y1);
     \path [->] (L1) edge  [bend left=10] (Y2);
 
-    \path [->] (L2) edge [blue,opacity=0.33,bend left=10]  (Y2);
+    \path [->] (L2) edge [blue,bend left=10]  (Y2);
     \path [->] (L2) edge [bend left=10]  (Y1);
 
 
@@ -370,9 +376,9 @@ pattern.
     \path [dashed,thin][->] (X3) edge   (Y2);
 
     \path [->] (Y1) edge  (Z2);
-    \path [->] (Y1) edge [blue,opacity=0.33] (Z1);
+    \path [->] (Y1) edge [blue] (Z1);
     \path [->] (Y2) edge  (Z1);
-    \path [->] (Y2) edge [blue,opacity=0.33] (Z2);
+    \path [->] (Y2) edge [blue] (Z2);
 
 
     %\path [->] (E) edge node {$8$} (F); 
@@ -387,11 +393,11 @@ pattern.
 \begin{itemize}[leftmargin=*] % This is from enumitem package
 \item[]\tikz{\path[very thick,->,draw=black] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Excitatory fixed-weight connection
-\item[]\tikz{\path[very thick,->,draw=blue,opacity=0.33] %,>={Stealth}] 
+\item[]\tikz{\path[very thick,->,draw=blue] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Inhibitory fixed-weight connection
 \item[]\tikz{\path[very thick,->,dashed,draw=black] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Excitatory plastic connection
-\item[]\tikz{\path[very thick,->,dashed,draw=blue,opacity=0.33] %,>={Stealth}] 
+\item[]\tikz{\path[very thick,->,dashed,draw=blue] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Inhibitory plastic connection
 \end{itemize}
 \end{minipage}
@@ -495,25 +501,25 @@ plasticity coefficient were positive.
     
     %\path [->] (P) edge   [bend left=10](H1);
     
-    \path [->] (L1) edge [blue,opacity=0.33,bend left=10]  (Y2);
+    \path [->] (L1) edge [blue,bend left=10]  (Y2);
     \path [->] (L1) edge  [bend left=10] (Y1);
 
-    \path [->] (L2) edge [blue,opacity=0.33,bend left=10]  (Y1);
+    \path [->] (L2) edge [blue,bend left=10]  (Y1);
     \path [->] (L2) edge [bend left=10]  (Y2);
 
 
-    \path [dashed,thin][->] (X1) edge  [blue,opacity=0.33] (Y1);
-    \path [dashed,thin][->] (X2) edge  [blue,opacity=0.33] (Y1);
-    \path [dashed,thin][->] (X3) edge  [blue,opacity=0.33] (Y1);
+    \path [dashed,thin][->] (X1) edge  [blue] (Y1);
+    \path [dashed,thin][->] (X2) edge  [blue] (Y1);
+    \path [dashed,thin][->] (X3) edge  [blue] (Y1);
 
-    \path [dashed,thin][->] (X1) edge   [blue,opacity=0.33](Y2);
-    \path [dashed,thin][->] (X2) edge   [blue,opacity=0.33](Y2);
-    \path [dashed,thin][->] (X3) edge   [blue,opacity=0.33](Y2);
+    \path [dashed,thin][->] (X1) edge   [blue](Y2);
+    \path [dashed,thin][->] (X2) edge   [blue](Y2);
+    \path [dashed,thin][->] (X3) edge   [blue](Y2);
 
     \path [->] (Y1) edge  (Z2);
-    \path [->] (Y1) edge [blue,opacity=0.33] (Z1);
+    \path [->] (Y1) edge [blue] (Z1);
     \path [->] (Y2) edge  (Z1);
-    \path [->] (Y2) edge [blue,opacity=0.33] (Z2);
+    \path [->] (Y2) edge [blue] (Z2);
 
 
     %\path [->] (E) edge node {$8$} (F); 
@@ -528,11 +534,11 @@ plasticity coefficient were positive.
 \begin{itemize}[leftmargin=*] % This is from enumitem package
 \item[]\tikz{\path[very thick,->,draw=black] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Excitatory fixed-weight connection
-\item[]\tikz{\path[very thick,->,draw=blue,opacity=0.33] %,>={Stealth}] 
+\item[]\tikz{\path[very thick,->,draw=blue] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Inhibitory fixed-weight connection
 \item[]\tikz{\path[very thick,->,dashed,draw=black] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Excitatory plastic connection
-\item[]\tikz{\path[very thick,->,dashed,draw=blue,opacity=0.33] %,>={Stealth}] 
+\item[]\tikz{\path[very thick,->,dashed,draw=blue] %,>={Stealth}] 
         (0,0) -- (1,0) ;}Inhibitory plastic connection
 \end{itemize}
 \end{minipage}
@@ -605,10 +611,10 @@ neuromodulation has been used in neural networks built by evolutionary methods
 \cite{Soltoggio2013-rg}, the methods described in this paper could be extended to allow
 backpropagation to design modulable-plasticity networks.
 
-%In addition, while we used very simple networks with only one plastic layer, the gradients
-%derived here can potentially be applied to more complex networks, including large
-%multi-layer networks and recurrent networks. 
-%We are currently exploring the application of BOHP to larger networks for more complex tasks.
+In addition, while we used very simple networks with only one plastic layer, the gradients
+derived here can potentially be applied to more complex networks, including large
+multi-layer networks and recurrent networks. 
+We are currently exploring the application of BOHP to larger networks for more complex tasks.
 
 In conclusion, we suggest that backpropagation of Hebbian plasticity is an
 efficient way to endow neural networks with long-term memories and lifelong
@@ -643,7 +649,7 @@ with regard to $\alpha_k$:
 
 With regard to $\alpha_k$, the derivative in the first right-hand-side term has the
 form $d(Const*f(\alpha_k))/d\alpha_k$, since only the $Hebb_l(t_z)$ depends on $\alpha_k$
-(indirectly through $y$), while neither $\alpha_l$ nor $x_l(t_z)$ does. By contrast, the second right-hand-side term has the
+(indirectly through $y$). By contrast, the second right-hand-side term has the
 form $d(Const*\alpha_k*f(\alpha_k))/d\alpha_k$, so we must develop it using the identity
 $(xf(x))'=xf'(x)+f(x)$. Therefore:
 

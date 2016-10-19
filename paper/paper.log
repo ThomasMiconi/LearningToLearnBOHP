@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.8.19)  17 OCT 2016 18:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.8.19)  19 OCT 2016 13:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1214,149 +1214,145 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
  [1
 
 {/opt/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-<figResultsCompletion.png, id=78, 291.2481pt x 229.8186pt>
+<figResultsCompletion.png, id=80, 291.2481pt x 229.8186pt>
 File: figResultsCompletion.png Graphic file (type png)
 
 <use figResultsCompletion.png>
-Package pdftex.def Info: figResultsCompletion.png used on input line 242.
+Package pdftex.def Info: figResultsCompletion.png used on input line 236.
 (pdftex.def)             Requested size: 145.62369pt x 114.90901pt.
 
-Overfull \hbox (6.50153pt too wide) in paragraph at lines 242--243
+Overfull \hbox (6.50153pt too wide) in paragraph at lines 236--237
  [][] 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 280.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 274.
 
 (/opt/texlive/2015/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 280.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 274.
 
-Underfull \hbox (badness 10000) in paragraph at lines 282--283
+Underfull \hbox (badness 10000) in paragraph at lines 276--277
 [][]\T1/ptm/m/n/10 (+20) Excitatory
  []
 
 
-Underfull \hbox (badness 3343) in paragraph at lines 282--283
+Underfull \hbox (badness 3343) in paragraph at lines 276--277
 \T1/ptm/m/n/10 (+20) fixed-weight con-nec-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 284--285
+Underfull \hbox (badness 10000) in paragraph at lines 278--279
 [][]\T1/ptm/m/n/10 (+20) Excitatory
  []
 
-[3] <figResultsOneshot.png, id=89, 299.9205pt x 229.8186pt>
+[3] <figResultsOneshot.png, id=92, 299.9205pt x 229.8186pt>
 File: figResultsOneshot.png Graphic file (type png)
 
 <use figResultsOneshot.png>
-Package pdftex.def Info: figResultsOneshot.png used on input line 339.
+Package pdftex.def Info: figResultsOneshot.png used on input line 333.
 (pdftex.def)             Requested size: 149.95987pt x 114.90901pt.
 
-Overfull \hbox (10.8377pt too wide) in paragraph at lines 338--340
+Overfull \hbox (10.8377pt too wide) in paragraph at lines 332--334
 [] 
  []
 
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 393.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 387.
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--396
+Underfull \hbox (badness 10000) in paragraph at lines 389--390
 [][]\T1/ptm/m/n/9 (+20) Excitatory
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--396
+Underfull \hbox (badness 10000) in paragraph at lines 389--390
 \T1/ptm/m/n/9 (+20) fixed-weight
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 397--398
+Underfull \hbox (badness 10000) in paragraph at lines 391--392
 [][]\T1/ptm/m/n/9 (+20) Inhibitory
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 397--398
+Underfull \hbox (badness 10000) in paragraph at lines 391--392
 \T1/ptm/m/n/9 (+20) fixed-weight
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 399--400
+Underfull \hbox (badness 10000) in paragraph at lines 393--394
 [][]\T1/ptm/m/n/9 (+20) Excitatory
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 401--402
+Underfull \hbox (badness 10000) in paragraph at lines 395--396
 [][]\T1/ptm/m/n/9 (+20) Inhibitory
  []
 
 [4 <./figResultsCompletion.png> <./figResultsOneshot.png>]
-<figResultsReversal.png, id=102, 299.9205pt x 229.8186pt>
+<figResultsReversal.png, id=104, 299.9205pt x 229.8186pt>
 File: figResultsReversal.png Graphic file (type png)
 
 <use figResultsReversal.png>
-Package pdftex.def Info: figResultsReversal.png used on input line 480.
+Package pdftex.def Info: figResultsReversal.png used on input line 474.
 (pdftex.def)             Requested size: 149.95987pt x 114.90901pt.
 
-Overfull \hbox (10.8377pt too wide) in paragraph at lines 479--481
+Overfull \hbox (10.8377pt too wide) in paragraph at lines 473--475
 [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 536--537
+Underfull \hbox (badness 10000) in paragraph at lines 530--531
+[][]\T1/ptm/m/n/9 (+20) Excitatory
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 530--531
+\T1/ptm/m/n/9 (+20) fixed-weight
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 532--533
+[][]\T1/ptm/m/n/9 (+20) Inhibitory
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 532--533
+\T1/ptm/m/n/9 (+20) fixed-weight
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 534--535
 [][]\T1/ptm/m/n/9 (+20) Excitatory
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 536--537
-\T1/ptm/m/n/9 (+20) fixed-weight
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 538--539
 [][]\T1/ptm/m/n/9 (+20) Inhibitory
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 538--539
-\T1/ptm/m/n/9 (+20) fixed-weight
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 540--541
-[][]\T1/ptm/m/n/9 (+20) Excitatory
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 542--543
-[][]\T1/ptm/m/n/9 (+20) Inhibitory
- []
-
-[5 <./figResultsReversal.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6]
-[7] [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 695.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 695.
+[5 <./figResultsReversal.png>] [6] [7]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 689.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 689.
  (./paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 695.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 695.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 689.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 689.
 Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: B6ABF36D8A389FC46255F21112001291;547.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 695.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 689.
  ) 
 Here is how much of TeX's memory you used:
- 24651 strings out of 493091
- 446947 string characters out of 6137640
+ 24660 strings out of 493091
+ 447091 string characters out of 6137640
  651925 words of memory out of 5000000
- 27551 multiletter control sequences out of 15000+600000
- 36549 words of font info for 138 fonts, out of 8000000 for 9000
+ 27554 multiletter control sequences out of 15000+600000
+ 36809 words of font info for 142 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,10n,61p,933b,1059s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,10n,61p,933b,1057s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/opt/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}{/opt/texlive/2015/
 texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</opt/texlive/2015/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmex10.pfb></opt/texlive/2015/texmf-dist/font
@@ -1370,10 +1366,10 @@ ive/2015/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></opt/texlive/2015
 /texmf-dist/fonts/type1/urw/times/utmb8a.pfb></opt/texlive/2015/texmf-dist/font
 s/type1/urw/times/utmr8a.pfb></opt/texlive/2015/texmf-dist/fonts/type1/urw/time
 s/utmri8a.pfb>
-Output written on paper.pdf (8 pages, 212251 bytes).
+Output written on paper.pdf (7 pages, 212163 bytes).
 PDF statistics:
- 193 PDF objects out of 1000 (max. 8388607)
- 161 compressed objects within 2 object streams
+ 191 PDF objects out of 1000 (max. 8388607)
+ 160 compressed objects within 2 object streams
  37 named destinations out of 1000 (max. 500000)
  19044 words of extra memory for PDF output out of 20736 (max. 10000000)
 

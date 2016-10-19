@@ -16,6 +16,33 @@
   {}
 \endgroup
 
+\entry{espinosa2012development}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Espinosa}{E.}%
+     {J~Sebastian}{J.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stryker}{S.}%
+     {Michael~P}{M.~P.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Elsevier}%
+  }
+  \strng{namehash}{EJSSMP1}
+  \strng{fullhash}{EJSSMP1}
+  \field{sortinit}{E}
+  \field{number}{2}
+  \field{pages}{230\bibrangedash 249}
+  \field{title}{Development and plasticity of the primary visual cortex}
+  \field{volume}{75}
+  \field{journaltitle}{Neuron}
+  \field{year}{2012}
+\endentry
+
 \entry{Graves2014-ch}{article}{}
   \name{author}{3}{}{%
     {{}%
