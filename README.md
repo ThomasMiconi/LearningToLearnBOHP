@@ -1,7 +1,3 @@
-# Learning to learn with backpropagation of Hebbian Plasticity
-
-This is the source code for an upcoming paper. We implement three tasks: pattern completion, one-shot learning, and reversal learning.
-
 # Learning to learn with Backpropagation of Hebbian Plasticity
 
 This is the source code for the experiments described in the Arxiv preprint, [Learning to learn with backpropagation of Hebbian Plasticity](https://arxiv.org/abs/1609.02228).
