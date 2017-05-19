@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex version 2.5 $
+% $ biblatex bbl format version 2.7 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -16,107 +16,187 @@
   {}
 \endgroup
 
-\entry{espinosa2012development}{article}{}
-  \name{author}{2}{}{%
-    {{}%
-     {Espinosa}{E.}%
-     {J~Sebastian}{J.~S.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Stryker}{S.}%
-     {Michael~P}{M.~P.}%
-     {}{}%
-     {}{}}%
-  }
-  \list{publisher}{1}{%
-    {Elsevier}%
-  }
-  \strng{namehash}{EJSSMP1}
-  \strng{fullhash}{EJSSMP1}
-  \field{sortinit}{E}
-  \field{number}{2}
-  \field{pages}{230\bibrangedash 249}
-  \field{title}{Development and plasticity of the primary visual cortex}
-  \field{volume}{75}
-  \field{journaltitle}{Neuron}
-  \field{year}{2012}
-\endentry
+\sortlist[entry]{nty/global/}
+  \entry{duan2016rl2}{article}{}
+    \name{author}{6}{}{%
+      {{hash=DY}{%
+         family={Duan},
+         family_i={D\bibinitperiod},
+         given={Yan},
+         given_i={Y\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Schulman},
+         family_i={S\bibinitperiod},
+         given={John},
+         given_i={J\bibinitperiod},
+      }}%
+      {{hash=CX}{%
+         family={Chen},
+         family_i={C\bibinitperiod},
+         given={Xi},
+         given_i={X\bibinitperiod},
+      }}%
+      {{hash=BPL}{%
+         family={Bartlett},
+         family_i={B\bibinitperiod},
+         given={Peter\bibnamedelima L.},
+         given_i={P\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=SI}{%
+         family={Sutskever},
+         family_i={S\bibinitperiod},
+         given={Ilya},
+         given_i={I\bibinitperiod},
+      }}%
+      {{hash=AP}{%
+         family={Abbeel},
+         family_i={A\bibinitperiod},
+         given={Pieter},
+         given_i={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DY+1}
+    \strng{fullhash}{DYSJCXBPLSIAP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \verb{eprint}
+    \verb arXiv:1611.02779
+    \endverb
+    \field{title}{RL{\textdollar}{\^{}}2{\textdollar}: Fast Reinforcement
+  Learning via Slow Reinforcement Learning}
+    \verb{url}
+    \verb http://arxiv.org/abs/1611.02779
+    \endverb
+    \field{year}{2016}
+  \endentry
 
-\entry{Graves2014-ch}{article}{}
-  \name{author}{3}{}{%
-    {{}%
-     {Graves}{G.}%
-     {Alex}{A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Wayne}{W.}%
-     {Greg}{G.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Danihelka}{D.}%
-     {Ivo}{I.}%
-     {}{}%
-     {}{}}%
-  }
-  \strng{namehash}{GAWGDI1}
-  \strng{fullhash}{GAWGDI1}
-  \field{sortinit}{G}
-  \field{abstract}{%
-  We extend the capabilities of neural networks by coupling them to external
+  \entry{Graves2014-ch}{article}{}
+    \name{author}{3}{}{%
+      {{hash=GA}{%
+         family={Graves},
+         family_i={G\bibinitperiod},
+         given={Alex},
+         given_i={A\bibinitperiod},
+      }}%
+      {{hash=WG}{%
+         family={Wayne},
+         family_i={W\bibinitperiod},
+         given={Greg},
+         given_i={G\bibinitperiod},
+      }}%
+      {{hash=DI}{%
+         family={Danihelka},
+         family_i={D\bibinitperiod},
+         given={Ivo},
+         given_i={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GAWGDI1}
+    \strng{fullhash}{GAWGDI1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{abstract}{%
+    We extend the capabilities of neural networks by coupling them to external
   memory resources, which they can interact with by attentional processes. The
   combined system is analogous to a Turing Machine or Von Neumann architecture
   but is differentiable end-to-end, allowing it to be efficiently trained with
   gradient descent. Preliminary results demonstrate that Neural Turing Machines
   can infer simple algorithms such as copying, sorting, and associative recall
   from input and output examples.%
-  }
-  \verb{eprint}
-  \verb 1410.5401
-  \endverb
-  \field{title}{Neural Turing Machines}
-  \field{eprinttype}{arXiv}
-  \field{eprintclass}{cs.NE}
-  \field{month}{10}
-  \field{year}{2014}
-\endentry
+    }
+    \verb{eprint}
+    \verb 1410.5401
+    \endverb
+    \field{title}{Neural Turing Machines}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.NE}
+    \field{month}{10}
+    \field{year}{2014}
+  \endentry
 
-\entry{Santoro2016-jn}{article}{}
-  \name{author}{5}{}{%
-    {{}%
-     {Santoro}{S.}%
-     {Adam}{A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Bartunov}{B.}%
-     {Sergey}{S.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Botvinick}{B.}%
-     {Matthew}{M.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Wierstra}{W.}%
-     {Daan}{D.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Lillicrap}{L.}%
-     {Timothy}{T.}%
-     {}{}%
-     {}{}}%
-  }
-  \strng{namehash}{SA+1}
-  \strng{fullhash}{SABSBMWDLT1}
-  \field{sortinit}{S}
-  \field{abstract}{%
-  Despite recent breakthroughs in the applications of deep neural networks, one
-  setting that presents a persistent challenge is that of ``one-shot
+  \entry{hochreiter2001learning}{article}{}
+    \name{author}{3}{}{%
+      {{hash=HS}{%
+         family={Hochreiter},
+         family_i={H\bibinitperiod},
+         given={Sepp},
+         given_i={S\bibinitperiod},
+      }}%
+      {{hash=YA}{%
+         family={Younger},
+         family_i={Y\bibinitperiod},
+         given={A},
+         given_i={A},
+      }}%
+      {{hash=CP}{%
+         family={Conwell},
+         family_i={C\bibinitperiod},
+         given={Peter},
+         given_i={P\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{HSYACP1}
+    \strng{fullhash}{HSYACP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{pages}{87\bibrangedash 94}
+    \field{title}{Learning to learn using gradient descent}
+    \field{journaltitle}{Artificial Neural Networks—ICANN 2001}
+    \field{year}{2001}
+  \endentry
+
+  \entry{Santoro2016-jn}{article}{}
+    \name{author}{5}{}{%
+      {{hash=SA}{%
+         family={Santoro},
+         family_i={S\bibinitperiod},
+         given={Adam},
+         given_i={A\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Bartunov},
+         family_i={B\bibinitperiod},
+         given={Sergey},
+         given_i={S\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Botvinick},
+         family_i={B\bibinitperiod},
+         given={Matthew},
+         given_i={M\bibinitperiod},
+      }}%
+      {{hash=WD}{%
+         family={Wierstra},
+         family_i={W\bibinitperiod},
+         given={Daan},
+         given_i={D\bibinitperiod},
+      }}%
+      {{hash=LT}{%
+         family={Lillicrap},
+         family_i={L\bibinitperiod},
+         given={Timothy},
+         given_i={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SA+1}
+    \strng{fullhash}{SABSBMWDLT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{abstract}{%
+    Despite recent breakthroughs in the applications of deep neural networks,
+  one setting that presents a persistent challenge is that of ``one-shot
   learning.'' Traditional gradient-based networks require a lot of data to
   learn, often through extensive iterative training. When new data is
   encountered, the models must inefficiently relearn their parameters to
@@ -129,13 +209,13 @@
   predictions after only a few samples. We also introduce a new method for
   accessing an external memory that focuses on memory content, unlike previous
   methods that additionally use memory location-based focusing mechanisms.%
-  }
-  \verb{eprint}
-  \verb 1605.06065
-  \endverb
-  \field{title}{One-shot Learning with {Memory-Augmented} Neural Networks}
-  \field{annotation}{%
-  - Quite confusing...<div><br></div><div>- Input is downsampled, flattened
+    }
+    \verb{eprint}
+    \verb 1605.06065
+    \endverb
+    \field{title}{One-shot Learning with {Memory-Augmented} Neural Networks}
+    \field{annotation}{%
+    - Quite confusing...<div><br></div><div>- Input is downsampled, flattened
   images of characters w/ labels</div><div><br></div><div>- Controller is an
   lstm that uses input and state to produce 'memory key'. The key is used to
   retrieve a blend of memories that look most like the key, and is then written
@@ -152,176 +232,271 @@
   more parameters..</div><div><br></div><div>- But the auto-encoder is trained
   unsupervised, while the MANN is trained supervised !... maybe unfair
   baseline...</div>%
-  }
-  \field{eprinttype}{arXiv}
-  \field{eprintclass}{cs.LG}
-  \field{year}{2016}
-  \warn{\item Invalid format of field 'month'}
-\endentry
+    }
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2016}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
 
-\entry{Soltoggio2013-rg}{article}{}
-  \name{author}{2}{}{%
-    {{}%
-     {Soltoggio}{S.}%
-     {Andrea}{A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Steil}{S.}%
-     {Jochen~J}{J.~J.}%
-     {}{}%
-     {}{}}%
-  }
-  \strng{namehash}{SASJJ1}
-  \strng{fullhash}{SASJJ1}
-  \field{sortinit}{S}
-  \field{abstract}{%
-  In the course of trial-and-error learning, the results of actions, manifested
-  as rewards or punishments, occur often seconds after the actions that caused
-  them. How can a reward be associated with an earlier action when the neural
-  activity that caused that action is no longer present in the network? This
-  problem is referred to as the distal reward problem. A recent computational
-  study proposes a solution using modulated plasticity with spiking neurons and
-  argues that precise firing patterns in the millisecond range are essential
-  for such a solution. In contrast, the study reported in this letter shows
-  that it is the rarity of correlating neural activity, and not the spike
-  timing, that allows the network to solve the distal reward problem. In this
-  study, rare correlations are detected in a standard rate-based computational
-  model by means of a threshold-augmented Hebbian rule. The novel modulated
-  plasticity rule allows a randomly connected network to learn in classical and
-  instrumental conditioning scenarios with delayed rewards. The rarity of
-  correlations is shown to be a pivotal factor in the learning and in handling
-  various delays of the reward. This study additionally suggests the hypothesis
-  that short-term synaptic plasticity may implement eligibility traces and
-  thereby serve as a selection mechanism in promoting candidate synapses for
-  long-term storage.%
-  }
-  \field{number}{4}
-  \field{pages}{940\bibrangedash 978}
-  \field{title}{Solving the distal reward problem with rare correlations}
-  \field{volume}{25}
-  \field{journaltitle}{Neural Comput.}
-  \field{month}{04}
-  \field{year}{2013}
-\endentry
+  \entry{Soltoggio2013-rg}{article}{}
+    \name{author}{2}{}{%
+      {{hash=SA}{%
+         family={Soltoggio},
+         family_i={S\bibinitperiod},
+         given={Andrea},
+         given_i={A\bibinitperiod},
+      }}%
+      {{hash=SJJ}{%
+         family={Steil},
+         family_i={S\bibinitperiod},
+         given={Jochen\bibnamedelima J},
+         given_i={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SASJJ1}
+    \strng{fullhash}{SASJJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{abstract}{%
+    In the course of trial-and-error learning, the results of actions,
+  manifested as rewards or punishments, occur often seconds after the actions
+  that caused them. How can a reward be associated with an earlier action when
+  the neural activity that caused that action is no longer present in the
+  network? This problem is referred to as the distal reward problem. A recent
+  computational study proposes a solution using modulated plasticity with
+  spiking neurons and argues that precise firing patterns in the millisecond
+  range are essential for such a solution. In contrast, the study reported in
+  this letter shows that it is the rarity of correlating neural activity, and
+  not the spike timing, that allows the network to solve the distal reward
+  problem. In this study, rare correlations are detected in a standard
+  rate-based computational model by means of a threshold-augmented Hebbian
+  rule. The novel modulated plasticity rule allows a randomly connected network
+  to learn in classical and instrumental conditioning scenarios with delayed
+  rewards. The rarity of correlations is shown to be a pivotal factor in the
+  learning and in handling various delays of the reward. This study
+  additionally suggests the hypothesis that short-term synaptic plasticity may
+  implement eligibility traces and thereby serve as a selection mechanism in
+  promoting candidate synapses for long-term storage.%
+    }
+    \field{number}{4}
+    \field{pages}{940\bibrangedash 978}
+    \field{title}{Solving the distal reward problem with rare correlations}
+    \field{volume}{25}
+    \field{journaltitle}{Neural Comput.}
+    \field{month}{04}
+    \field{year}{2013}
+  \endentry
 
-\entry{Sukhbaatar2015-ly}{incollection}{}
-  \name{author}{4}{}{%
-    {{}%
-     {Sukhbaatar}{S.}%
-     {Sainbayar}{S.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Szlam}{S.}%
-     {Arthur}{A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Weston}{W.}%
-     {Jason}{J.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Fergus}{F.}%
-     {Rob}{R.}%
-     {}{}%
-     {}{}}%
-  }
-  \name{editor}{5}{}{%
-    {{}%
-     {Cortes}{C.}%
-     {C}{C}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Lawrence}{L.}%
-     {N~D}{N.~D.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Lee}{L.}%
-     {D~D}{D.~D.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Sugiyama}{S.}%
-     {M}{M}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Garnett}{G.}%
-     {R}{R}%
-     {}{}%
-     {}{}}%
-  }
-  \list{publisher}{1}{%
-    {Curran Associates, Inc.}%
-  }
-  \strng{namehash}{SS+1}
-  \strng{fullhash}{SSSAWJFR1}
-  \field{sortinit}{S}
-  \field{booktitle}{Advances in Neural Information Processing Systems 28}
-  \field{pages}{2440\bibrangedash 2448}
-  \field{title}{{End-To-End} Memory Networks}
-  \field{year}{2015}
-\endentry
+  \entry{Sukhbaatar2015-ly}{incollection}{}
+    \name{author}{4}{}{%
+      {{hash=SS}{%
+         family={Sukhbaatar},
+         family_i={S\bibinitperiod},
+         given={Sainbayar},
+         given_i={S\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Szlam},
+         family_i={S\bibinitperiod},
+         given={Arthur},
+         given_i={A\bibinitperiod},
+      }}%
+      {{hash=WJ}{%
+         family={Weston},
+         family_i={W\bibinitperiod},
+         given={Jason},
+         given_i={J\bibinitperiod},
+      }}%
+      {{hash=FR}{%
+         family={Fergus},
+         family_i={F\bibinitperiod},
+         given={Rob},
+         given_i={R\bibinitperiod},
+      }}%
+    }
+    \name{editor}{5}{}{%
+      {{hash=CC}{%
+         family={Cortes},
+         family_i={C\bibinitperiod},
+         given={C},
+         given_i={C},
+      }}%
+      {{hash=LND}{%
+         family={Lawrence},
+         family_i={L\bibinitperiod},
+         given={N\bibnamedelima D},
+         given_i={N\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=LDD}{%
+         family={Lee},
+         family_i={L\bibinitperiod},
+         given={D\bibnamedelima D},
+         given_i={D\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Sugiyama},
+         family_i={S\bibinitperiod},
+         given={M},
+         given_i={M},
+      }}%
+      {{hash=GR}{%
+         family={Garnett},
+         family_i={G\bibinitperiod},
+         given={R},
+         given_i={R},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Curran Associates, Inc.}%
+    }
+    \strng{namehash}{SS+1}
+    \strng{fullhash}{SSSAWJFR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Advances in Neural Information Processing Systems 28}
+    \field{pages}{2440\bibrangedash 2448}
+    \field{title}{{End-To-End} Memory Networks}
+    \field{year}{2015}
+  \endentry
 
-\entry{Vasilkoski2011-ww}{inproceedings}{}
-  \name{author}{8}{}{%
-    {{}%
-     {Vasilkoski}{V.}%
-     {Zlatko}{Z.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Ames}{A.}%
-     {Heather}{H.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Chandler}{C.}%
-     {Ben}{B.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Gorchetchnikov}{G.}%
-     {Anatoli}{A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {L\'{e}veill\'{e}}{L.}%
-     {Jasmin}{J.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Livitz}{L.}%
-     {Gennady}{G.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Mingolla}{M.}%
-     {Ennio}{E.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Versace}{V.}%
-     {Massimiliano}{M.}%
-     {}{}%
-     {}{}}%
-  }
-  \strng{namehash}{VZ+1}
-  \strng{fullhash}{VZAHCBGALJLGMEVM1}
-  \field{sortinit}{V}
-  \field{booktitle}{The 2011 International Joint Conference on Neural Networks
-  ({IJCNN})}
-  \field{pages}{2563\bibrangedash 2569}
-  \field{title}{Review of stability properties of neural plasticity rules for
+  \entry{Vasilkoski2011-ww}{inproceedings}{}
+    \name{author}{8}{}{%
+      {{hash=VZ}{%
+         family={Vasilkoski},
+         family_i={V\bibinitperiod},
+         given={Zlatko},
+         given_i={Z\bibinitperiod},
+      }}%
+      {{hash=AH}{%
+         family={Ames},
+         family_i={A\bibinitperiod},
+         given={Heather},
+         given_i={H\bibinitperiod},
+      }}%
+      {{hash=CB}{%
+         family={Chandler},
+         family_i={C\bibinitperiod},
+         given={Ben},
+         given_i={B\bibinitperiod},
+      }}%
+      {{hash=GA}{%
+         family={Gorchetchnikov},
+         family_i={G\bibinitperiod},
+         given={Anatoli},
+         given_i={A\bibinitperiod},
+      }}%
+      {{hash=LJ}{%
+         family={L\'{e}veill\'{e}},
+         family_i={L\bibinitperiod},
+         given={Jasmin},
+         given_i={J\bibinitperiod},
+      }}%
+      {{hash=LG}{%
+         family={Livitz},
+         family_i={L\bibinitperiod},
+         given={Gennady},
+         given_i={G\bibinitperiod},
+      }}%
+      {{hash=ME}{%
+         family={Mingolla},
+         family_i={M\bibinitperiod},
+         given={Ennio},
+         given_i={E\bibinitperiod},
+      }}%
+      {{hash=VM}{%
+         family={Versace},
+         family_i={V\bibinitperiod},
+         given={Massimiliano},
+         given_i={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VZ+1}
+    \strng{fullhash}{VZAHCBGALJLGMEVM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{V}
+    \field{sortinithash}{V}
+    \field{booktitle}{The 2011 International Joint Conference on Neural
+  Networks ({IJCNN})}
+    \field{pages}{2563\bibrangedash 2569}
+    \field{title}{Review of stability properties of neural plasticity rules for
   implementation on memristive neuromorphic hardware}
-  \field{year}{2011}
-\endentry
+    \field{year}{2011}
+  \endentry
 
-\lossort
-\endlossort
-
+  \entry{wang2016learning}{article}{}
+    \name{author}{9}{}{%
+      {{hash=WJX}{%
+         family={Wang},
+         family_i={W\bibinitperiod},
+         given={Jane\bibnamedelima X.},
+         given_i={J\bibinitperiod\bibinitdelim X\bibinitperiod},
+      }}%
+      {{hash=KZ}{%
+         family={Kurth{-}Nelson},
+         family_i={K\bibinitperiod},
+         given={Zeb},
+         given_i={Z\bibinitperiod},
+      }}%
+      {{hash=TD}{%
+         family={Tirumala},
+         family_i={T\bibinitperiod},
+         given={Dhruva},
+         given_i={D\bibinitperiod},
+      }}%
+      {{hash=SH}{%
+         family={Soyer},
+         family_i={S\bibinitperiod},
+         given={Hubert},
+         given_i={H\bibinitperiod},
+      }}%
+      {{hash=LJZ}{%
+         family={Leibo},
+         family_i={L\bibinitperiod},
+         given={Joel\bibnamedelima Z.},
+         given_i={J\bibinitperiod\bibinitdelim Z\bibinitperiod},
+      }}%
+      {{hash=MR}{%
+         family={Munos},
+         family_i={M\bibinitperiod},
+         given={R{\'{e}}mi},
+         given_i={R\bibinitperiod},
+      }}%
+      {{hash=BC}{%
+         family={Blundell},
+         family_i={B\bibinitperiod},
+         given={Charles},
+         given_i={C\bibinitperiod},
+      }}%
+      {{hash=KD}{%
+         family={Kumaran},
+         family_i={K\bibinitperiod},
+         given={Dharshan},
+         given_i={D\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Botvinick},
+         family_i={B\bibinitperiod},
+         given={Matt},
+         given_i={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WJX+1}
+    \strng{fullhash}{WJXKZTDSHLJZMRBCKDBM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{eprint}
+    \verb arXiv:1611.05763
+    \endverb
+    \field{title}{Learning to reinforcement learn}
+    \field{year}{2016}
+  \endentry
+\endsortlist
 \endinput

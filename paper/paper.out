@@ -2,7 +2,7 @@
 \BOOKMARK [1][-]{section.2}{Networks with Hebbian synapses}{}% 2
 \BOOKMARK [1][-]{section.3}{Gradients}{}% 3
 \BOOKMARK [1][-]{section.4}{Experiments}{}% 4
-\BOOKMARK [2][-]{subsection.4.1}{Applying BOHP}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.1}{Applying BOHP: general description}{section.4}% 5
 \BOOKMARK [2][-]{subsection.4.2}{Pattern completion}{section.4}% 6
 \BOOKMARK [2][-]{subsection.4.3}{One-shot learning of arbitrary patterns}{section.4}% 7
 \BOOKMARK [2][-]{subsection.4.4}{Reversal learning}{section.4}% 8

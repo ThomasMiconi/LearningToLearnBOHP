@@ -33,73 +33,73 @@
 
 \maketitle
 
-\begin{abstract}
+\begin{abstract} 
 
-Hebbian plasticity is a powerful principle that allows biological brains to
-learn from their lifetime experience.  By contrast, artificial neural networks
-trained with backpropagation generally have fixed connection weights that do
-not change once training is complete.  While recent methods can endow neural
-networks with long-term memories, Hebbian plasticity is currently not amenable
-to gradient descent. Here we derive analytical expressions for activity
-gradients in neural networks with Hebbian plastic connections. Using these
-expressions, we can use backpropagation to train not just the baseline weights
-of the connections, but also their plasticity. As a result, the networks
-``learn how to learn''  in order to solve the problem at hand: the trained
-networks automatically perform fast learning of unpredictable environmental
-features during their lifetime, expanding the range of solvable problems. We
-test the algorithm on various on-line learning tasks, including pattern completion, one-shot
-learning, and reversal learning.  The algorithm successfully learns how to
-learn the relevant associations from one-shot instruction, and fine-tunes the
-temporal dynamics of plasticity to allow for continual learning in response to
-changing environmental parameters. We conclude that backpropagation of Hebbian
-plasticity offers a powerful model for lifelong learning.
+How can we train systems that keep learning from their ongoing experience?  In
+natural brains, continuous learning occurs largely through 
+Hebbian synaptic plasticity.  However, Hebbian plasticity is
+currently not amenable to the powerful optimization technique of gradient
+descent. Here we show how to compute analytical gradients in neural networks
+with Hebbian plastic connections. Using these expressions, we can use
+backpropagation to train not just the baseline \emph{weights} of the
+connections, but also their \emph{plasticity}. As a result, the networks
+``learn how to learn''  in order to solve the problem at hand: backpropagation
+fashions connectivity and plasticity so that trained networks automatically
+extract relevant task features for each novel instance of a given task.  We
+test the algorithm on various on-line learning tasks, including pattern
+completion with arbitrary patterns, one-shot learning, and reversal learning.
+The algorithm successfully learns how to learn the relevant associations from
+one-shot instruction, and fine-tunes the temporal dynamics of plasticity to
+allow for continual learning in response to changing environmental parameters.
+We conclude that backpropagation of Hebbian plasticity offers a powerful model
+for lifelong learning and meta-learning.
 
 \end{abstract}
 
 
 \section{Introduction}
 
-Living organisms endowed with neural systems exhibit remarkably complex behaviors.
-While much of this complexity results from evolutionary learning over millions
-of years, it also results from the ability of neural systems to learn from
-experience during their lifetime. Indeed, this ability for lifelong learning is
-itself a product of evolution, which has fashioned not just the overall
-connectivity of the brain, but also the plasticity of these connections. 
+Meta-learning, or ``learning to learn'', is the process of training systems to
+extract relevant information from their ongoing experience, and to use it
+appropriately to guide future behavior. As a result, the trained systems can
+solve generic \emph{classes} of problems, because they can automatically acquire
+the contingent information necessary to solve each particular instance of the problem.
+This ability to form and exploit new memories from experience allows the
+systems to handle unpredictable or changing environments.
 
-Lifetime learning is beneficial for several reasons. For one thing,
-many environmental features can simply not be predicted at birth, and/or change
-over time (e.g. the
-position of food sources, the identifying features of specific individuals, etc.), 
-requiring learning from experience in contact with the
-environment. Furthermore, even for predictable environmental features, much of
-the information necessary to produce adaptive behavior can be obtained ``for
-free'' by learning from the environment, thus removing a potentially huge chunk
-of the search space that evolution must explore. For example, the connectivity
-of primary visual cortex is fashioned by Hebbian plasticity rather than having
-each single connection genetically specified \cite{espinosa2012development}, allowing a huge number of cells
-to organize into a powerful, reliable information-processing system with
-minimal genetic specification.
+Recent research has produced several methods for meta-learning. A popular
+method is to use recurrent neural networks (RNNs), in which current activity
+can affect future input-output mappings (that is, effective connectivity); as a
+result, with an adequate training paradigm, RNNs can learn to extract specific
+features of their inputs to guide future responses to other inputs \cite{hochreiter2001learning}.
+This principle can also be extended to ``learn to reinforcement
+learn'', training networks to automatically acquire behaviors that maximize a
+sparse, delayed reward signal \cite{duan2016rl2,wang2016learning}.
 
-Lifetime long-term plasticity in living brains generally follows the Hebbian principle: a
+
+Another method is to include an explicit declarative memory in the system, that can be read from and written to in a fully differentiable fashion. This 
+approach is used in Neural Turing Machines
+\cite{Graves2014-ch,Santoro2016-jn} and
+Memory Networks \cite{Sukhbaatar2015-ly}. 
+
+
+In natural brains, however, long-term learning from ongoing experience occurs
+largely through synaptic plasticity, which generally follows the Hebbian principle: a
 cell that consistently contributes in making another cell fire will build a
 stronger connection to that cell. Note that this generic principle can be
 implemented in many different ways, including covariance learning, instar and
 outstar rules, BCM learning, etc. (see \cite{Vasilkoski2011-ww} and references therein). 
 
 Backpropagation can train neural networks to perform remarkably complex
-tasks. However, it is generally used to train fixed-weights networks, with no further changes in connectivity after training. 
-Several
-methods have been proposed to make lifelong learning amenable to
-backpropagation, including most recently neural Turing machines
-\cite{Graves2014-ch,Santoro2016-jn} and
-memory networks \cite{Sukhbaatar2015-ly}. However, it would be useful to incorporate the powerful, well-studied
+tasks. However, it is generally used to train fixed-weights networks, with no further changes in connectivity after training. While the methods described above allow some form of lifelong learning in backpropagation-trained networks, 
+it would be useful to incorporate the powerful, well-studied
 principle of Hebbian plasticity in backpropagation
 training.
 
 Here we derive analytical expressions for activity gradients in neural networks
 with Hebbian plastic connections. Using these expressions, we can use
-backpropagation to train not just the baseline weights of the connections, but
-also their plasticity. This allows backpropagation to ``learn how to learn'',
+backpropagation to train not just the baseline \emph{weights} of the connections, but
+also their \emph{plasticity}. This allows backpropagation to ``learn how to learn'',
 in order to solve general types of problems with unpredictable features, rather
 than specific instances.
 
@@ -151,6 +151,20 @@ b\right\}
 
 where $b$ is a bias parameter. 
 
+As a result, each connection possesses a fixed, unchanging ``baseline''
+component withweight $w$ (similar to standard neural network weights), and a
+plastic component with time-varying, experience-dependent weight $\alpha
+Hebb(t)$. 
+Note that $w$ and $\alpha$ specify the relative impact of fixed and plastic
+components in each connection: a connection can be either fully fixed
+($\alpha=0$, or fully plastic with no fixed/baseline component (if $w=0$), or
+have both a fixed baseline and an additional plastic component (if both $w$ and
+$alpha$ are nonzero).
+
+The $w$ and $\alpha$ coefficients are the ones that are optimized by
+backpropagation. By asjuting those, backpropagation can build networks with
+arbitrary combinations of plastic and fixed connections to learn novel
+instances of a given task, as described below.
 
 \section{Gradients}
 
@@ -211,15 +225,35 @@ y_{raw})}{\partial \alpha_k}$
 
 \section{Experiments}
 
-\subsection{Applying BOHP}
+\subsection{Applying BOHP: general description}
+
+\begin{figure} \includegraphics[scale=0.5]{MetaLearning.png} \caption{General
+process of meta learning. During each episode, synaptic plasticity occurs
+according to the current values of parameters $\alpha$ and $w$ for each
+connection. At the end of eac episode, the errors and gradients accumulated during the
+episode are used to update every $w$ and $\alpha$. Hebbian traces (plastic weights) are reset to 0 before each new episode.
+} 
+\label{fig:metalearning}
+\end{figure}
 
 In all tasks described below, lifetime experience is divided into
-\emph{episodes}, each of which lasts for a certain number of timesteps. At the
+\emph{episodes}, each of which lasts for a certain number of timesteps. While
+all episodes involve the same generic class of task, the specific instantiation
+of the task varies from episode to episode; for example, when learning the
+general problem of pattern completion, the pattern to be completed will differ
+from one episode to the next. The goal of meta-learning (and of BOHP) is to
+train networks that can automatically and immediately acquire the specific
+features in each novel instance of a general task. For example, they can
+immediately learn the pattern to be completed with one instruction timestep,
+and also the proper connectivity to complete it from any partial input in
+subsequent timesteps of the episode.
+
+At the
 beginning of each episode, all Hebbian traces are initialized to 0. Then,
 at each timestep, the network processes an input pattern and produces an output
-according to its current parameters, and the Hebbian traces are updated
-according to Equation \ref{eq:hebb}. Furthermore, errors and gradients are also
-computed. At the end of each episode, the errors and gradients at each timestep
+according to its current parameters, and synaptic plasticity occurs according to the inputs and outputs at each synapse (that is, the Hebbian traces are updated
+according to Equation \ref{eq:hebb}). Furthermore, errors and gradients are also
+computed and accumulated. At the end of each episode, the errors and gradients accumulated during the episode
 are used to update network parameters (weights and plasticity coefficients)
 according to error backpropagation and gradient descent. The whole process
 iterates for a fixed number of episodes. For the last 500 episodes, training

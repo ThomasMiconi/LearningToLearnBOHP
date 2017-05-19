@@ -19,33 +19,65 @@
 \bibstyle{biblatex}
 \bibdata{paper-blx,smallbiblio}
 \citation{biblatex-control}
-\citation{espinosa2012development}
-\citation{Vasilkoski2011-ww}
+\abx@aux@sortscheme{nty}
+\abx@aux@refcontext{nty/global/}
+\citation{hochreiter2001learning}
+\abx@aux@cite{hochreiter2001learning}
+\abx@aux@segm{0}{0}{hochreiter2001learning}
+\citation{duan2016rl2}
+\abx@aux@cite{duan2016rl2}
+\abx@aux@segm{0}{0}{duan2016rl2}
+\citation{wang2016learning}
+\abx@aux@cite{wang2016learning}
+\abx@aux@segm{0}{0}{wang2016learning}
 \citation{Graves2014-ch}
+\abx@aux@cite{Graves2014-ch}
+\abx@aux@segm{0}{0}{Graves2014-ch}
 \citation{Santoro2016-jn}
+\abx@aux@cite{Santoro2016-jn}
+\abx@aux@segm{0}{0}{Santoro2016-jn}
 \citation{Sukhbaatar2015-ly}
+\abx@aux@cite{Sukhbaatar2015-ly}
+\abx@aux@segm{0}{0}{Sukhbaatar2015-ly}
+\citation{Vasilkoski2011-ww}
+\abx@aux@cite{Vasilkoski2011-ww}
+\abx@aux@segm{0}{0}{Vasilkoski2011-ww}
 \@writefile{toc}{\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax }
 \@writefile{lof}{\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax }
 \@writefile{lot}{\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax }
 \@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
 \citation{Vasilkoski2011-ww}
+\abx@aux@segm{0}{0}{Vasilkoski2011-ww}
 \@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {2}Networks with Hebbian synapses}{2}{section.2}}
 \newlabel{eq:hebb}{{1}{2}{Networks with Hebbian synapses}{equation.2.1}{}}
 \newlabel{eq:y}{{2}{2}{Networks with Hebbian synapses}{equation.2.2}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {3}Gradients}{2}{section.3}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {3}Gradients}{3}{section.3}}
 \newlabel{eq:gradw}{{3}{3}{Gradients}{equation.3.3}{}}
 \newlabel{eq:gradalpha}{{4}{3}{Gradients}{equation.3.4}{}}
 \@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{3}{section.4}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Applying BOHP}{3}{subsection.4.1}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Pattern completion}{3}{subsection.4.2}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Results for the pattern completion experiment. (a) Mean absolute error per timestep over each episode, for mutually exclusive stimuli. The dark line indicates median error over 20 runs, while shaded areas indicate interquartile range. For the last 500 episodes, training is halted and parameters are frozen. (b) Schema of a typical network after training. Only 3 elements shown for clarity (actual pattern size: 8 elements). \relax }}{4}{figure.caption.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Applying BOHP: general description}{3}{subsection.4.1}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces General process of meta learning. During each episode, synaptic plasticity occurs according to the current values of parameters $\alpha $ and $w$ for each connection. At the end of eac episode, the errors and gradients accumulated during the episode are used to update every $w$ and $\alpha $. Hebbian traces (plastic weights) are reset to 0 before each new episode. \relax }}{4}{figure.caption.1}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:completion}{{1}{4}{Results for the pattern completion experiment. (a) Mean absolute error per timestep over each episode, for mutually exclusive stimuli. The dark line indicates median error over 20 runs, while shaded areas indicate interquartile range. For the last 500 episodes, training is halted and parameters are frozen. (b) Schema of a typical network after training. Only 3 elements shown for clarity (actual pattern size: 8 elements). \relax }{figure.caption.1}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}One-shot learning of arbitrary patterns}{4}{subsection.4.3}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Results for the one-shot learning experiment. (a) Median absolute error per timestep over each episode. Conventions are as in Figure \ref  {fig:completion}. (b) Schema of a typical network after training. In addition to the label nodes L1 and L2, only 3 pattern elements shown for clarity (actual pattern size: 8 elements). See text for details.\relax }}{4}{figure.caption.2}}
-\newlabel{fig:oneshot}{{2}{4}{Results for the one-shot learning experiment. (a) Median absolute error per timestep over each episode. Conventions are as in Figure \ref {fig:completion}. (b) Schema of a typical network after training. In addition to the label nodes L1 and L2, only 3 pattern elements shown for clarity (actual pattern size: 8 elements). See text for details.\relax }{figure.caption.2}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Results for the reversal learning experiment. Conventions are as in Figure \ref  {fig:completion}. (a) Mean absolute error per timestep over each episode. (b) Schema of a typical network after training. Notice the negative plasticity connections from the pattern nodes to the hidden layer. See text for details.\relax }}{5}{figure.caption.3}}
-\newlabel{fig:reversal}{{3}{5}{Results for the reversal learning experiment. Conventions are as in Figure \ref {fig:completion}. (a) Mean absolute error per timestep over each episode. (b) Schema of a typical network after training. Notice the negative plasticity connections from the pattern nodes to the hidden layer. See text for details.\relax }{figure.caption.3}{}}
+\newlabel{fig:metalearning}{{1}{4}{General process of meta learning. During each episode, synaptic plasticity occurs according to the current values of parameters $\alpha $ and $w$ for each connection. At the end of eac episode, the errors and gradients accumulated during the episode are used to update every $w$ and $\alpha $. Hebbian traces (plastic weights) are reset to 0 before each new episode. \relax }{figure.caption.1}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Results for the pattern completion experiment. (a) Mean absolute error per timestep over each episode, for mutually exclusive stimuli. The dark line indicates median error over 20 runs, while shaded areas indicate interquartile range. For the last 500 episodes, training is halted and parameters are frozen. (b) Schema of a typical network after training. Only 3 elements shown for clarity (actual pattern size: 8 elements). \relax }}{4}{figure.caption.2}}
+\newlabel{fig:completion}{{2}{4}{Results for the pattern completion experiment. (a) Mean absolute error per timestep over each episode, for mutually exclusive stimuli. The dark line indicates median error over 20 runs, while shaded areas indicate interquartile range. For the last 500 episodes, training is halted and parameters are frozen. (b) Schema of a typical network after training. Only 3 elements shown for clarity (actual pattern size: 8 elements). \relax }{figure.caption.2}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Pattern completion}{4}{subsection.4.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}One-shot learning of arbitrary patterns}{5}{subsection.4.3}}
 \@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Reversal learning}{5}{subsection.4.4}}
-\citation{Soltoggio2013-rg}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Results for the one-shot learning experiment. (a) Median absolute error per timestep over each episode. Conventions are as in Figure \ref  {fig:completion}. (b) Schema of a typical network after training. In addition to the label nodes L1 and L2, only 3 pattern elements shown for clarity (actual pattern size: 8 elements). See text for details.\relax }}{5}{figure.caption.3}}
+\newlabel{fig:oneshot}{{3}{5}{Results for the one-shot learning experiment. (a) Median absolute error per timestep over each episode. Conventions are as in Figure \ref {fig:completion}. (b) Schema of a typical network after training. In addition to the label nodes L1 and L2, only 3 pattern elements shown for clarity (actual pattern size: 8 elements). See text for details.\relax }{figure.caption.3}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Results for the reversal learning experiment. Conventions are as in Figure \ref  {fig:completion}. (a) Mean absolute error per timestep over each episode. (b) Schema of a typical network after training. Notice the negative plasticity connections from the pattern nodes to the hidden layer. See text for details.\relax }}{6}{figure.caption.4}}
+\newlabel{fig:reversal}{{4}{6}{Results for the reversal learning experiment. Conventions are as in Figure \ref {fig:completion}. (a) Mean absolute error per timestep over each episode. (b) Schema of a typical network after training. Notice the negative plasticity connections from the pattern nodes to the hidden layer. See text for details.\relax }{figure.caption.4}{}}
 \@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusions and future work}{6}{section.5}}
+\citation{Soltoggio2013-rg}
+\abx@aux@cite{Soltoggio2013-rg}
+\abx@aux@segm{0}{0}{Soltoggio2013-rg}
+\abx@aux@refcontextdefaultsdone
+\abx@aux@defaultrefcontext{0}{duan2016rl2}{nty/global/}
+\abx@aux@defaultrefcontext{0}{Graves2014-ch}{nty/global/}
+\abx@aux@defaultrefcontext{0}{hochreiter2001learning}{nty/global/}
+\abx@aux@defaultrefcontext{0}{Santoro2016-jn}{nty/global/}
+\abx@aux@defaultrefcontext{0}{Soltoggio2013-rg}{nty/global/}
+\abx@aux@defaultrefcontext{0}{Sukhbaatar2015-ly}{nty/global/}
+\abx@aux@defaultrefcontext{0}{Vasilkoski2011-ww}{nty/global/}
+\abx@aux@defaultrefcontext{0}{wang2016learning}{nty/global/}
