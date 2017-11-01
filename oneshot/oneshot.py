@@ -228,12 +228,12 @@ for episode in range(g['NBEPISODES']):
 
     # Loss: -log(p(correct)), where p(x) is the proba computed for option x by the softmax (i.e. the z)
     errors = -np.log(np.choose(np.argmax(tgts, axis=0), zs))
-    errors[:g['LEARNPERIOD']].fill(0)       # We don't care about early episode, exploratory "learning" period.....  Not strictly needed, but makes things a bit better.
+    errors[:int(g['LEARNPERIOD'])].fill(0)       # We don't care about early episode, exploratory "learning" period.....  Not strictly needed, but makes things a bit better.
     archerrs.append(errors)
     
     # Now we compute the gradient of the error wrt z at each timestep:
     dedzsraw = zs.copy() - tgts.copy()             # Derivative of loss (-log(p(correct))) through softmax: the computed probabilities minus the target (0 or 1) probabilities (see http://cs231n.github.io/neural-networks-case-study/#grad )
-    dedzsraw[:, :g['LEARNPERIOD']].fill(0)
+    dedzsraw[:, :int(g['LEARNPERIOD'])].fill(0)
     #dedzsraw = dedzs * zsflat * (1 - zsflat)    # Gradient through logistic nonlinearity
     #dedzsraw = dedzs * (1 - zsflat * zsflat)   # Gradient through tanh nonlinearity
     #dedzsraw = dedzs.copy() # Gradient through linear output, for debugging
@@ -302,7 +302,7 @@ for episode in range(g['NBEPISODES']):
             alpha[alpha<1e-6] = 1e-6
 
     # Log the total error for this episode
-    meanerror = np.mean(np.abs(errors[g['LEARNPERIOD']:]))
+    meanerror = np.mean(np.abs(errors[int(g['LEARNPERIOD']):]))
 
     # Every 10th episode, display a message and update the output file
     if episode % 10 == 0:
@@ -356,4 +356,3 @@ if g['GRADIENTCHECKING']:
     calcdifferr_tot = calcdifferr_a + calcdifferr_w
     print "Calculated diff from inputs:"
     print calcdifferr_tot
-
