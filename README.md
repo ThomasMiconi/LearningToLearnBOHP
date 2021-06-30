@@ -1,4 +1,12 @@
-# Learning to learn with Backpropagation of Hebbian Plasticity
+## This code is obsolete and superseded by https://github.com/uber-research/differentiable-plasticity
+
+This code is the early version of Differentiable Plasticity. Expressions for the gradients were derived by hand - no autodiff. This work was presented at the NIPS 2016 Continual Learning workshop. This code is kept solely for documentation purposes.
+
+
+----
+
+
+## Learning to learn with Backpropagation of Hebbian Plasticity
 
 This is the source code for the experiments described in the Arxiv preprint, [Learning to learn with backpropagation of Hebbian Plasticity](https://arxiv.org/abs/1609.02228).
 
